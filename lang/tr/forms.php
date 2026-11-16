@@ -1,0 +1,71 @@
+<?php
+
+declare(strict_types=1);
+
+// Machine-translated from en/forms.php.
+return [
+    'modules' => [
+        'forms' => 'Formlar',
+        'form_fields' => 'Form alanları',
+        'submissions' => 'Gönderimler',
+    ],
+    'fields' => [
+        'id' => 'ID',
+        'active' => 'Etkin',
+        'name' => 'Ad',
+        'code' => 'Kod',
+        'recipients' => 'Gönderimlerin gideceği adresler',
+        'button_label' => 'Düğme metni',
+        'success_message' => 'Gönderimden sonraki mesaj',
+        'updated_at' => 'Güncellendi',
+        'form' => 'Form',
+        'label' => 'Etiket',
+        'field_name' => 'Alan kodu',
+        'type' => 'Tür',
+        'required' => 'Zorunlu',
+        'options' => 'Seçenekler',
+        'sort' => 'Sıralama',
+        'submitted_at' => 'Gönderildi',
+        'content' => 'İçerik',
+        'page_url' => 'Sayfa',
+        'locale' => 'Dil',
+        'ip' => 'IP adresi',
+        'user_agent' => 'Tarayıcı',
+    ],
+    'hints' => [
+        'code' => 'Latin harfleri, rakamlar, "-" ve "_". Bir sayfada: <x-atrium-forms::form code="contact" />',
+        'recipients' => 'E-posta adresleri, her satıra bir tane veya virgülle ayrılmış. Boş: gönderimler yalnızca burada saklanır.',
+        'field_name' => 'Latin harfleri, rakamlar, "-" ve "_"; form içinde benzersiz.',
+        'options' => 'Liste veya seçenek düğmeleri için: her satıra bir seçenek.',
+    ],
+    'types' => [
+        'text' => 'Metin',
+        'email' => 'E-posta',
+        'tel' => 'Telefon',
+        'number' => 'Sayı',
+        'date' => 'Tarih',
+        'textarea' => 'Uzun metin',
+        'select' => 'Liste',
+        'radio' => 'Seçenek düğmeleri',
+        'checkbox' => 'Onay kutusu',
+    ],
+    'public' => [
+        'submit' => 'Gönder',
+        'sent' => 'Teşekkürler! Mesajınız gönderildi.',
+        'too_fast' => 'Form çok hızlı gönderildi. Lütfen kontrol edip yeniden gönderin.',
+        'too_many' => 'Çok fazla deneme. Lütfen bir dakika sonra tekrar deneyin.',
+        'honeypot' => 'Bu alanı boş bırakın',
+        'choose' => '— Seçin —',
+        'yes' => 'Evet',
+        'no' => 'Hayır',
+    ],
+    'validation' => [
+        'recipients' => '":email" bir e-posta adresi değil.',
+        'field_name_taken' => 'Bu formda bu koda sahip bir alan zaten var.',
+    ],
+    'mail' => [
+        'subject' => 'Yeni gönderim: :form',
+        'heading' => 'Yeni gönderim: :form',
+        'page' => 'Gönderildiği sayfa',
+    ],
+];

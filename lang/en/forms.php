@@ -1,0 +1,70 @@
+<?php
+
+declare(strict_types=1);
+
+return [
+    'modules' => [
+        'forms' => 'Forms',
+        'form_fields' => 'Form fields',
+        'submissions' => 'Submissions',
+    ],
+    'fields' => [
+        'id' => 'ID',
+        'active' => 'Active',
+        'name' => 'Name',
+        'code' => 'Code',
+        'recipients' => 'Send submissions to',
+        'button_label' => 'Button text',
+        'success_message' => 'Message after sending',
+        'updated_at' => 'Updated',
+        'form' => 'Form',
+        'label' => 'Label',
+        'field_name' => 'Field code',
+        'type' => 'Type',
+        'required' => 'Required',
+        'options' => 'Options',
+        'sort' => 'Sort',
+        'submitted_at' => 'Sent',
+        'content' => 'Content',
+        'page_url' => 'Page',
+        'locale' => 'Language',
+        'ip' => 'IP address',
+        'user_agent' => 'Browser',
+    ],
+    'hints' => [
+        'code' => 'Latin letters, digits, "-" and "_". On a page: <x-atrium-forms::form code="contact" />',
+        'recipients' => 'E-mail addresses, one per line or separated by commas. Empty: submissions are only kept here.',
+        'field_name' => 'Latin letters, digits, "-" and "_"; unique within the form.',
+        'options' => 'For a list or radio buttons: one option per line.',
+    ],
+    'types' => [
+        'text' => 'Text',
+        'email' => 'E-mail',
+        'tel' => 'Phone',
+        'number' => 'Number',
+        'date' => 'Date',
+        'textarea' => 'Long text',
+        'select' => 'List',
+        'radio' => 'Radio buttons',
+        'checkbox' => 'Checkbox',
+    ],
+    'public' => [
+        'submit' => 'Send',
+        'sent' => 'Thank you! Your message has been sent.',
+        'too_fast' => 'The form was sent too quickly. Please check it and send it again.',
+        'too_many' => 'Too many attempts. Please try again in a minute.',
+        'honeypot' => 'Leave this field empty',
+        'choose' => '— Choose —',
+        'yes' => 'Yes',
+        'no' => 'No',
+    ],
+    'validation' => [
+        'recipients' => '":email" is not an e-mail address.',
+        'field_name_taken' => 'This form already has a field with this code.',
+    ],
+    'mail' => [
+        'subject' => 'New submission: :form',
+        'heading' => 'New submission: :form',
+        'page' => 'Sent from',
+    ],
+];
