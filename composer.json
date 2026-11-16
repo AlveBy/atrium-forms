@@ -36,6 +36,14 @@
         }
     },
     "extra": {
+        "atrium": {
+            "resources": [
+                "Atrium\\Forms\\Models\\Form",
+                "Atrium\\Forms\\Models\\FormField",
+                "Atrium\\Forms\\Models\\FormSubmission"
+            ],
+            "migrations": "database/migrations"
+        },
         "laravel": {
             "providers": [
                 "Atrium\\Forms\\FormsServiceProvider"

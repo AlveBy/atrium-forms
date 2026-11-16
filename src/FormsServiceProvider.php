@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Atrium\Forms;
 
+use Atrium\Admin\Modules\Modules;
 use Atrium\Forms\Http\Controllers\SubmitController;
 use Atrium\Forms\Models\Form;
-use Atrium\Forms\Models\FormField;
-use Atrium\Forms\Models\FormSubmission;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
@@ -20,15 +19,20 @@ final class FormsServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/atrium-forms.php', 'atrium-forms');
+    }
 
-        foreach ([Form::class, FormField::class, FormSubmission::class] as $model) {
-            config()->push('atrium.resources', $model);
-        }
+    /**
+     * The models and migrations come from the manifest in composer.json
+     * (`extra.atrium`) once `atrium:module:install` has run; until then the
+     * route is not there either.
+     */
+    public static function installed(): bool
+    {
+        return app(Modules::class)->available(Form::class);
     }
 
     public function boot(): void
     {
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'atrium-forms');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'atrium-forms');
         Blade::componentNamespace('Atrium\\Forms\\View\\Components', 'atrium-forms');
@@ -51,7 +55,7 @@ final class FormsServiceProvider extends ServiceProvider
 
         // Once the panel has booted: Route::localized() is its macro.
         $this->app->booted(function (): void {
-            if ($this->app->routesAreCached()) {
+            if ($this->app->routesAreCached() || ! self::installed()) {
                 return;
             }
 

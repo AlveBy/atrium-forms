@@ -6,8 +6,10 @@ Forms and submissions for [Atrium](https://github.com/AlveBy/atrium): an editor 
 
 ```bash
 composer require alveby/atrium-forms
-php artisan migrate
+php artisan atrium:module:install alveby/atrium-forms
 ```
+
+`atrium:module:install` creates the tables and turns the module on; `atrium:module:remove alveby/atrium-forms` turns it off and asks whether to keep the forms and submissions.
 
 The admin gets three entries:
 

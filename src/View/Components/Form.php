@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atrium\Forms\View\Components;
 
 use Atrium\Admin\Support\ContentLanguages;
+use Atrium\Forms\FormsServiceProvider;
 use Atrium\Forms\Http\Controllers\SubmitController;
 use Atrium\Forms\Models\Form as FormModel;
 use Atrium\Forms\Support\SpamGuard;
@@ -23,6 +24,10 @@ final class Form extends Component
 
     public function render(): View|string
     {
+        if (! FormsServiceProvider::installed()) {
+            return '';
+        }
+
         $form = FormModel::query()->where('code', $this->code)->where('active', true)->with('fields')->first();
 
         if ($form === null) {
