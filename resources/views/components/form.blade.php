@@ -1,3 +1,7 @@
+{{--
+    This file is part of Atrium (https://github.com/AlveBy/atrium).
+    Copyright (c) 2026 AlveBy. Licensed under the MIT License, see LICENSE.
+--}}
 @once
 <style>
     .atrium-form { display: grid; gap: 1rem; max-width: 36rem; }
