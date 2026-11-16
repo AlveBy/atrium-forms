@@ -18,6 +18,7 @@ return [
         'button_label' => 'Texto do botão',
         'success_message' => 'Mensagem após o envio',
         'updated_at' => 'Atualizado',
+        'submissions_count' => 'Envios',
         'form' => 'Formulário',
         'label' => 'Rótulo',
         'field_name' => 'Código do campo',

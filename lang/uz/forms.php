@@ -18,6 +18,7 @@ return [
         'button_label' => 'Tugma matni',
         'success_message' => 'Yuborilgandan keyingi xabar',
         'updated_at' => 'O‘zgartirilgan',
+        'submissions_count' => 'Arizalar',
         'form' => 'Shakl',
         'label' => 'Yorliq',
         'field_name' => 'Maydon kodi',

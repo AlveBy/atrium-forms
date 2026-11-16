@@ -18,6 +18,7 @@ return [
         'button_label' => 'Texto del botón',
         'success_message' => 'Mensaje tras el envío',
         'updated_at' => 'Actualizado',
+        'submissions_count' => 'Envíos',
         'form' => 'Formulario',
         'label' => 'Etiqueta',
         'field_name' => 'Código del campo',

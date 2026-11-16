@@ -136,4 +136,35 @@ final class AdminTest extends TestCase
         $this->assertNull($submission->form_id);
         $this->assertSame('Contact us', $submission->form_name);
     }
+
+    public function test_the_form_keeps_count_of_its_submissions(): void
+    {
+        $form = $this->contactForm();
+        $updated = $form->fresh()?->updated_at?->toDateTimeString();
+
+        $this->travel(1)->minutes();
+        $this->post('/forms/contact', $this->submission())->assertRedirect();
+        $this->post('/forms/contact', $this->submission(['name' => 'Bob']))->assertRedirect();
+        $this->post('/forms/contact', [...$this->submission(), 'website' => 'spam'])->assertRedirect();
+
+        $this->assertSame(2, $form->fresh()?->submissions_count);
+        $this->assertSame($updated, $form->fresh()?->updated_at?->toDateTimeString());
+
+        $this->actingAs($this->admin(), 'admin')
+            ->get('/admin/forms')
+            ->assertOk()
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->where('columns', fn ($columns): bool => collect($columns)->contains('name', 'submissions_count'))
+                ->where('items.data.0.submissions_count', 2));
+
+        $this->delete('/admin/form_submissions/'.FormSubmission::query()->value('id'))->assertRedirect();
+        $this->assertSame(1, $form->fresh()?->submissions_count);
+
+        // The migration counts what is already there.
+        Form::query()->whereKey($form->id)->toBase()->update(['submissions_count' => 0]);
+        $migration = require dirname(__DIR__, 2).'/database/migrations/2026_11_17_000002_add_submissions_count_to_forms.php';
+        $migration->down();
+        $migration->up();
+        $this->assertSame(1, $form->fresh()?->submissions_count);
+    }
 }

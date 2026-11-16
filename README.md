@@ -15,9 +15,11 @@ The admin gets three entries:
 
 | Entry | What it holds |
 |---|---|
-| Forms | name, code, the addresses submissions are mailed to, the button text and the message after sending (both per content language), on/off |
+| Forms | name, code, the addresses submissions are mailed to, the button text and the message after sending (both per content language), on/off; the list shows how many submissions each form has |
 | Form fields | the form, label (per content language), field code, type, required, options, sort |
 | Submissions | what was sent, with the form, page, language, IP address and browser; read and deleted, never edited |
+
+The number of submissions is kept on the form (`forms.submissions_count`): it goes up when a submission is stored and down when one is deleted in the admin, so the list does not count them on every page.
 
 Forms belong to sites: each site has its own, and the lists show the current site's forms, fields and submissions. Each entry has the usual four permissions in the role form; give an editor `form_submissions.view` to read the submissions.
 

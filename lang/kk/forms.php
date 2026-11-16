@@ -18,6 +18,7 @@ return [
         'button_label' => 'Түйме мәтіні',
         'success_message' => 'Жіберілгеннен кейінгі хабарлама',
         'updated_at' => 'Өзгертілді',
+        'submissions_count' => 'Өтінімдер',
         'form' => 'Форма',
         'label' => 'Белгі',
         'field_name' => 'Өріс коды',

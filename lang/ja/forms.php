@@ -18,6 +18,7 @@ return [
         'button_label' => 'ボタンの文言',
         'success_message' => '送信後のメッセージ',
         'updated_at' => '更新日',
+        'submissions_count' => '送信数',
         'form' => 'フォーム',
         'label' => 'ラベル',
         'field_name' => '項目コード',

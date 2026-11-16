@@ -18,6 +18,7 @@ return [
         'button_label' => 'Tekst przycisku',
         'success_message' => 'Komunikat po wysłaniu',
         'updated_at' => 'Zmieniono',
+        'submissions_count' => 'Zgłoszenia',
         'form' => 'Formularz',
         'label' => 'Etykieta',
         'field_name' => 'Kod pola',

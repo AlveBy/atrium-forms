@@ -17,6 +17,7 @@ return [
         'button_label' => 'Текст кнопки',
         'success_message' => 'Сообщение после отправки',
         'updated_at' => 'Изменена',
+        'submissions_count' => 'Заявок',
         'form' => 'Форма',
         'label' => 'Подпись',
         'field_name' => 'Код поля',

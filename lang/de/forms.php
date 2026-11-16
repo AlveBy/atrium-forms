@@ -18,6 +18,7 @@ return [
         'button_label' => 'Text der Schaltfläche',
         'success_message' => 'Nachricht nach dem Senden',
         'updated_at' => 'Geändert',
+        'submissions_count' => 'Einsendungen',
         'form' => 'Formular',
         'label' => 'Beschriftung',
         'field_name' => 'Feldcode',

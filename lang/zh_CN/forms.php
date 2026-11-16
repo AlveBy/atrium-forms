@@ -18,6 +18,7 @@ return [
         'button_label' => '按钮文字',
         'success_message' => '提交后的提示',
         'updated_at' => '更新时间',
+        'submissions_count' => '提交数',
         'form' => '表单',
         'label' => '标签',
         'field_name' => '字段代码',

@@ -18,6 +18,7 @@ return [
         'button_label' => 'Düğme metni',
         'success_message' => 'Gönderimden sonraki mesaj',
         'updated_at' => 'Güncellendi',
+        'submissions_count' => 'Gönderimler',
         'form' => 'Form',
         'label' => 'Etiket',
         'field_name' => 'Alan kodu',

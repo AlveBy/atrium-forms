@@ -17,6 +17,7 @@ return [
         'button_label' => 'Button text',
         'success_message' => 'Message after sending',
         'updated_at' => 'Updated',
+        'submissions_count' => 'Submissions',
         'form' => 'Form',
         'label' => 'Label',
         'field_name' => 'Field code',

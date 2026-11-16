@@ -29,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $code
  * @property bool $active
  * @property string|null $recipients
+ * @property int $submissions_count
  * @property-read Collection<int,FormField> $fields
  */
 class Form extends Model implements Administrable
@@ -44,7 +45,7 @@ class Form extends Model implements Administrable
 
     protected function casts(): array
     {
-        return ['active' => 'boolean'];
+        return ['active' => 'boolean', 'submissions_count' => 'integer'];
     }
 
     /**
@@ -131,6 +132,7 @@ class Form extends Model implements Administrable
             TextColumn::make('name')->label(__('atrium-forms::forms.fields.name'))->sortable()->searchable(),
             TextColumn::make('code')->label(__('atrium-forms::forms.fields.code'))->sortable()->searchable(),
             BooleanColumn::make('active')->label(__('atrium-forms::forms.fields.active')),
+            TextColumn::make('submissions_count')->label(__('atrium-forms::forms.fields.submissions_count'))->sortable(),
             DateColumn::make('updated_at')->label(__('atrium-forms::forms.fields.updated_at'))->sortable(),
         ];
     }

@@ -18,6 +18,7 @@ return [
         'button_label' => 'Testo del pulsante',
         'success_message' => 'Messaggio dopo l’invio',
         'updated_at' => 'Modificato',
+        'submissions_count' => 'Invii',
         'form' => 'Modulo',
         'label' => 'Etichetta',
         'field_name' => 'Codice del campo',

@@ -52,6 +52,29 @@ class FormSubmission extends Model implements Administrable
     }
 
     /**
+     * Keeps the form's submissions_count. The form's updated_at stays: a new
+     * submission is not an edit of the form.
+     */
+    protected static function booted(): void
+    {
+        static::created(fn (FormSubmission $submission) => $submission->countOnForm(1));
+        static::deleted(fn (FormSubmission $submission) => $submission->countOnForm(-1));
+    }
+
+    private function countOnForm(int $by): void
+    {
+        if ($this->form_id === null) {
+            return;
+        }
+
+        $form = Form::withoutGlobalScopes()->whereKey($this->form_id)->toBase();
+
+        $by > 0
+            ? $form->increment('submissions_count', $by)
+            : $form->where('submissions_count', '>', 0)->decrement('submissions_count', -$by);
+    }
+
+    /**
      * @return BelongsTo<Form,$this>
      */
     public function form(): BelongsTo
