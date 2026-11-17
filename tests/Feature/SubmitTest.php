@@ -106,22 +106,38 @@ final class SubmitTest extends TestCase
     public function test_the_site_captcha_guards_every_form(): void
     {
         Mail::fake();
-        config(['atrium.captcha.driver' => 'image']);
+        config(['atrium.captcha.driver' => 'image', 'atrium-forms.per_minute' => 20]);
         $this->contactForm();
 
         $page = (string) $this->get('/contacts')->assertOk()->assertSee('name="captcha_token"', false)->getContent();
 
         // No answer: refused, the typed fields come back, the captcha does not.
         $this->from(url('/contacts'))
-            ->post('/forms/contact', $this->submission(['name' => 'Typed name']) + ['captcha' => '99'])
+            ->post('/forms/contact', $this->submission(['name' => 'Typed name']) + ['captcha' => '99', 'captcha_token' => 'forged', 'g-recaptcha-response' => 'forged'])
             ->assertRedirect(url('/contacts').'#form-contact')
             ->assertSessionHasErrorsIn('form-contact', ['captcha'])
             ->assertSessionHasInput('fields.name', 'Typed name')
-            ->assertSessionMissing('_old_input.captcha');
+            ->assertSessionMissing('_old_input.captcha')
+            ->assertSessionMissing('_old_input.captcha_token')
+            ->assertSessionMissing('_old_input.g-recaptcha-response')
+            ->assertSessionMissing('_old_input._t');
         $this->assertSame(0, FormSubmission::query()->count());
 
-        $this->get('/contacts')->assertSee('value="Typed name"', false)->assertSee('role="alert"', false);
+        $this->get('/contacts')->assertSee('value="Typed name"', false)->assertSee(__('atrium::captcha.failed'));
 
+        $this->assertSame(1, preg_match('/name="captcha_token" value="([^"]+)"/', $page, $match));
+        $token = html_entity_decode($match[1]);
+
+        // A wrong answer to a real question, from a browser and from a JSON client.
+        $this->post('/forms/contact', $this->submission() + ['captcha_token' => $token, 'captcha' => '-1'])
+            ->assertSessionHasErrorsIn('form-contact', ['captcha']);
+        $this->postJson('/forms/contact', $this->submission())
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('captcha');
+        $this->assertSame(0, FormSubmission::query()->count());
+
+        // A question is asked once: the right answer goes with a new one.
+        $page = (string) $this->get('/contacts')->getContent();
         $this->assertSame(1, preg_match('/name="captcha_token" value="([^"]+)"/', $page, $match));
         $token = html_entity_decode($match[1]);
         $this->from(url('/contacts'))

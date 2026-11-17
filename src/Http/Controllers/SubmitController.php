@@ -138,7 +138,8 @@ final class SubmitController
 
     /**
      * Back to the form with its errors and what the visitor typed, less the
-     * trap and the captcha (a used captcha is not asked again); JSON gets 422.
+     * form's time and the captcha (a used captcha is not asked again); JSON
+     * gets 422.
      *
      * @param  array<string,mixed>  $errors
      */
@@ -150,7 +151,7 @@ final class SubmitController
         if (! $request->expectsJson()) {
             $exception->response = redirect()->to(url()->previous().'#form-'.$code)
                 ->withErrors($exception->errors(), self::errorBag($code))
-                ->withInput($request->except([(string) config('atrium-forms.honeypot'), SpamGuard::TIME_FIELD, ...CaptchaManager::INPUTS]));
+                ->withInput($request->except([SpamGuard::TIME_FIELD, ...CaptchaManager::INPUTS]));
         }
 
         return $exception;

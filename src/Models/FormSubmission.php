@@ -68,10 +68,7 @@ class FormSubmission extends Model implements Administrable
 
     private function countOnForm(int $by): void
     {
-        if ($this->form_id === null) {
-            return;
-        }
-
+        // A submission of a deleted form (form_id null) matches no form.
         $form = Form::withoutGlobalScopes()->whereKey($this->form_id)->toBase();
 
         $by > 0

@@ -50,7 +50,7 @@ class Form extends Model implements Administrable
 
     protected function casts(): array
     {
-        return ['active' => 'boolean', 'submissions_count' => 'integer'];
+        return ['active' => 'boolean'];
     }
 
     /**

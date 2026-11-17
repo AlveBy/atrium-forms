@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Atrium\Forms\Tests\Feature;
 
+use Atrium\Admin\Models\Site;
 use Atrium\Forms\Models\Form;
 use Atrium\Forms\Models\FormField;
 use Atrium\Forms\Models\FormSubmission;
@@ -46,6 +47,7 @@ final class AdminTest extends TestCase
         $form = Form::query()->sole();
         $this->assertSame(['sales@example.com', 'boss@example.com'], $form->recipientList());
         $this->assertSame('Call me', $form->button_label);
+        $this->assertTrue($form->active);
 
         $this->post('/admin/form_fields', [
             'form_id' => $form->id,
@@ -171,5 +173,44 @@ final class AdminTest extends TestCase
         $migration->down();
         $migration->up();
         $this->assertSame(1, $form->fresh()?->submissions_count);
+    }
+
+    public function test_the_count_stays_right_for_other_forms_sites_and_orphans(): void
+    {
+        $form = $this->contactForm();
+        $other = Form::query()->create(['name' => 'Other', 'code' => 'other']);
+        $this->post('/forms/contact', $this->submission())->assertRedirect();
+
+        // Another form of the site is not counted.
+        $this->assertSame(1, $form->fresh()?->submissions_count);
+        $this->assertSame(0, $other->fresh()?->submissions_count);
+
+        // A count that is already 0 does not go below it.
+        Form::query()->whereKey($form->id)->toBase()->update(['submissions_count' => 0]);
+        $this->actingAs($this->admin(), 'admin')
+            ->delete('/admin/form_submissions/'.FormSubmission::query()->value('id'))
+            ->assertRedirect();
+        $this->assertSame(0, $form->fresh()?->submissions_count);
+
+        // A submission whose form was deleted is deleted without touching any form.
+        $this->post('/forms/contact', $this->submission())->assertRedirect();
+        $this->delete("/admin/forms/{$form->id}")->assertRedirect();
+        $this->delete('/admin/form_submissions/'.FormSubmission::query()->value('id'))->assertRedirect();
+        $this->assertSame(0, FormSubmission::query()->count());
+        $this->assertSame(0, $other->fresh()?->submissions_count);
+
+        // A form of another site is counted while this site is the current one.
+        $site = Site::query()->create(['code' => 'second', 'name' => 'Second', 'folder' => 'site2']);
+        $theirs = Form::query()->withoutGlobalScopes()->create(['site_id' => $site->id, 'name' => 'Theirs', 'code' => 'theirs']);
+        (new FormSubmission)->forceFill(['site_id' => $site->id, 'form_id' => $theirs->id, 'form_name' => 'Theirs', 'data' => []])->save();
+        $this->assertSame(1, Form::query()->withoutGlobalScopes()->find($theirs->id)?->submissions_count);
+        $this->assertSame(0, $other->fresh()?->submissions_count);
+
+        // The migration gives a form without submissions 0.
+        $migration = require dirname(__DIR__, 2).'/database/migrations/2026_11_17_000002_add_submissions_count_to_forms.php';
+        $migration->down();
+        $migration->up();
+        $this->assertSame(0, $other->fresh()?->submissions_count);
+        $this->assertSame(1, Form::query()->withoutGlobalScopes()->find($theirs->id)?->submissions_count);
     }
 }
