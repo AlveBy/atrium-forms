@@ -97,9 +97,7 @@ class FormField extends Model implements Administrable
      */
     public function publicRules(): array
     {
-        $rules = [$this->required ? 'required' : 'nullable'];
-
-        return [...$rules, ...match ($this->type) {
+        return [$this->required ? 'required' : 'nullable', ...match ($this->type) {
             'email' => ['string', 'email', 'max:255'],
             'tel' => ['string', 'max:50', 'regex:/^[0-9+()\-.\s]+$/'],
             'number' => ['numeric'],

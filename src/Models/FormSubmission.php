@@ -17,6 +17,7 @@ use Atrium\Admin\Traits\BelongsToSite;
 use Atrium\Admin\Traits\InteractsWithAdmin;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
@@ -62,18 +63,17 @@ class FormSubmission extends Model implements Administrable
      */
     protected static function booted(): void
     {
-        static::created(fn (FormSubmission $submission) => $submission->countOnForm(1));
-        static::deleted(fn (FormSubmission $submission) => $submission->countOnForm(-1));
+        static::created(fn (FormSubmission $submission) => $submission->ofForm()->increment('submissions_count'));
+        static::deleted(fn (FormSubmission $submission) => $submission->ofForm()->where('submissions_count', '>', 0)->decrement('submissions_count'));
     }
 
-    private function countOnForm(int $by): void
+    /**
+     * The form's row, for its counter; a submission of a deleted form
+     * (form_id null) matches no form.
+     */
+    private function ofForm(): QueryBuilder
     {
-        // A submission of a deleted form (form_id null) matches no form.
-        $form = Form::withoutGlobalScopes()->whereKey($this->form_id)->toBase();
-
-        $by > 0
-            ? $form->increment('submissions_count', $by)
-            : $form->where('submissions_count', '>', 0)->decrement('submissions_count', -$by);
+        return Form::withoutGlobalScopes()->whereKey($this->form_id)->toBase();
     }
 
     /**

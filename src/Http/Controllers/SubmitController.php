@@ -33,7 +33,7 @@ final class SubmitController
 {
     public function __invoke(Request $request, ContentLanguages $languages): RedirectResponse|JsonResponse
     {
-        $code = (string) $request->route('code');
+        $code = $request->route('code');
 
         // The site's own form only: Form belongs to sites.
         $form = Form::query()->where('code', $code)->where('active', true)->with('fields')->firstOrFail();
@@ -78,14 +78,13 @@ final class SubmitController
                 'name' => $field->name,
                 'type' => $field->type,
                 // In the default language: the one the site's staff read.
-                'label' => (string) $field->getTranslation('label', $default),
+                'label' => $field->getTranslation('label', $default),
                 'value' => $field->type === 'checkbox' ? (bool) $value : (is_scalar($value) ? trim((string) $value) : null),
             ];
         }
 
         $submission = new FormSubmission;
         $submission->forceFill([
-            'site_id' => $form->site_id,
             'form_id' => $form->id,
             'form_name' => $form->name,
             'data' => $data,
@@ -127,7 +126,7 @@ final class SubmitController
 
     private static function sent(Request $request, Form $form): RedirectResponse|JsonResponse
     {
-        $message = filled($form->success_message) ? (string) $form->success_message : __('atrium-forms::forms.public.sent');
+        $message = filled($form->success_message) ? $form->success_message : __('atrium-forms::forms.public.sent');
 
         if ($request->expectsJson()) {
             return response()->json(['message' => $message]);

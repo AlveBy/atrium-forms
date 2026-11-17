@@ -43,9 +43,9 @@ final class FormsServiceProvider extends ServiceProvider
         Blade::componentNamespace('Atrium\\Forms\\View\\Components', 'atrium-forms');
 
         RateLimiter::for('atrium-forms', function (Request $request): Limit {
-            $code = (string) $request->route('code');
+            $code = $request->route('code');
 
-            return Limit::perMinute(max(1, (int) config('atrium-forms.per_minute', 5)))
+            return Limit::perMinute((int) config('atrium-forms.per_minute', 5))
                 ->by($request->ip().'|'.$code)
                 ->response(function (Request $request, array $headers) use ($code) {
                     $message = __('atrium-forms::forms.public.too_many');

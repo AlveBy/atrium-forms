@@ -15,6 +15,7 @@ use Atrium\Forms\Http\Controllers\SubmitController;
 use Atrium\Forms\Models\Form as FormModel;
 use Atrium\Forms\Support\SpamGuard;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Arr;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\ViewErrorBag;
 use Illuminate\View\Component;
@@ -47,10 +48,10 @@ final class Form extends Component
             'action' => app(ContentLanguages::class)->route('atrium.forms.submit', ['code' => $form->code]),
             'errors' => $errors instanceof ViewErrorBag ? $errors->getBag(SubmitController::errorBag($form->code)) : new MessageBag,
             // Old input belongs to the form that was sent, not to every form on the page.
-            'old' => $session?->getOldInput('_form') === $form->code ? (array) $session->getOldInput('fields', []) : [],
+            'old' => $session?->getOldInput('_form') === $form->code ? Arr::wrap($session->getOldInput('fields', [])) : [],
             'sent' => $session?->get('atrium-forms.sent') === $form->code,
-            'message' => filled($form->success_message) ? (string) $form->success_message : __('atrium-forms::forms.public.sent'),
-            'button' => filled($form->button_label) ? (string) $form->button_label : __('atrium-forms::forms.public.submit'),
+            'message' => filled($form->success_message) ? $form->success_message : __('atrium-forms::forms.public.sent'),
+            'button' => filled($form->button_label) ? $form->button_label : __('atrium-forms::forms.public.submit'),
             'honeypot' => SpamGuard::honeypotName(),
             'timeField' => SpamGuard::TIME_FIELD,
             'token' => SpamGuard::token(),
