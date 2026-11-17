@@ -232,6 +232,16 @@ final class SubmitDetailsTest extends TestCase
             ->assertSessionHas('atrium-forms.sent', 'contact');
     }
 
+    public function test_a_wait_the_config_does_not_make_a_number_of_is_no_wait(): void
+    {
+        Mail::fake();
+        config(['atrium-forms.min_seconds' => 'off']);
+        $this->contactForm();
+
+        $this->post('/forms/contact', [...$this->submission(), '_t' => Crypt::encryptString((string) time())])
+            ->assertSessionHas('atrium-forms.sent', 'contact');
+    }
+
     public function test_a_signed_time_that_is_not_a_number_counts_as_long_ago(): void
     {
         Mail::fake();

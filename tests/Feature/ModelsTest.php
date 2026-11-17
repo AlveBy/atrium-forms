@@ -186,6 +186,15 @@ final class ModelsTest extends TestCase
         );
     }
 
+    public function test_the_hooks_of_a_submission_are_public_api(): void
+    {
+        // Model::__call and __callStatic hide a protected method, so the
+        // visibility is read as declared.
+        foreach (['form', 'text', 'isCreatableInAdmin', 'isEditableInAdmin'] as $method) {
+            $this->assertTrue((new \ReflectionMethod(FormSubmission::class, $method))->isPublic(), $method);
+        }
+    }
+
     public function test_a_submission_without_a_form_counts_nowhere(): void
     {
         $form = $this->contactForm();
