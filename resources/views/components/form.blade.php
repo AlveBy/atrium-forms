@@ -11,6 +11,8 @@
     .atrium-form__error { color: #b91c1c; margin: 0; }
     .atrium-form__sent { margin: 0; font-weight: bold; }
     .atrium-form button { justify-self: start; font: inherit; padding: .5rem 1rem; border: 1px solid var(--control, #6b7280); border-radius: .375rem; background: var(--surface, #f3f4f6); color: var(--text, inherit); cursor: pointer; }
+    .atrium-form .atrium-captcha { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: center; }
+    .atrium-form .atrium-captcha input[type=text] { width: 5rem; font: inherit; padding: .5rem .6rem; border: 1px solid var(--control, #6b7280); border-radius: .375rem; background: var(--bg, #fff); color: var(--text, inherit); }
     .atrium-form__trap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
 </style>
 @endonce
@@ -77,6 +79,13 @@
             @endif
         </div>
     @endforeach
+
+    @if (config('atrium-forms.captcha', true))
+        <x-atrium::captcha />
+        @if ($errors->has('captcha'))
+            <p class="atrium-form__error" role="alert">{{ $errors->first('captcha') }}</p>
+        @endif
+    @endif
 
     <button type="submit">{{ $button }}</button>
 </form>

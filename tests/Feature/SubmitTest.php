@@ -103,6 +103,40 @@ final class SubmitTest extends TestCase
             ->assertSee('value="nope"', false);
     }
 
+    public function test_the_site_captcha_guards_every_form(): void
+    {
+        Mail::fake();
+        config(['atrium.captcha.driver' => 'image']);
+        $this->contactForm();
+
+        $page = (string) $this->get('/contacts')->assertOk()->assertSee('name="captcha_token"', false)->getContent();
+
+        // No answer: refused, the typed fields come back, the captcha does not.
+        $this->from(url('/contacts'))
+            ->post('/forms/contact', $this->submission(['name' => 'Typed name']) + ['captcha' => '99'])
+            ->assertRedirect(url('/contacts').'#form-contact')
+            ->assertSessionHasErrorsIn('form-contact', ['captcha'])
+            ->assertSessionHasInput('fields.name', 'Typed name')
+            ->assertSessionMissing('_old_input.captcha');
+        $this->assertSame(0, FormSubmission::query()->count());
+
+        $this->get('/contacts')->assertSee('value="Typed name"', false)->assertSee('role="alert"', false);
+
+        $this->assertSame(1, preg_match('/name="captcha_token" value="([^"]+)"/', $page, $match));
+        $token = html_entity_decode($match[1]);
+        $this->from(url('/contacts'))
+            ->post('/forms/contact', $this->submission() + ['captcha_token' => $token, 'captcha' => (string) Crypt::decrypt($token)['a']])
+            ->assertSessionHasNoErrors()
+            ->assertSessionHas('atrium-forms.sent', 'contact');
+        $this->assertSame(1, FormSubmission::query()->count());
+
+        // A site may keep the captcha off its forms.
+        config(['atrium-forms.captcha' => false]);
+        $this->get('/contacts')->assertDontSee('name="captcha_token"', false);
+        $this->post('/forms/contact', $this->submission())->assertSessionHas('atrium-forms.sent', 'contact');
+        $this->assertSame(2, FormSubmission::query()->count());
+    }
+
     public function test_a_filled_honeypot_looks_sent_but_is_dropped(): void
     {
         Mail::fake();

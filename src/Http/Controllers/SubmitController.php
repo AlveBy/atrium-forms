@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Atrium\Forms\Http\Controllers;
 
+use Atrium\Admin\Captcha\CaptchaManager;
 use Atrium\Admin\Support\ContentLanguages;
 use Atrium\Forms\Mail\SubmissionMail;
 use Atrium\Forms\Models\Form;
@@ -45,7 +46,7 @@ final class SubmitController
         }
 
         if ($spam === SpamGuard::TOO_FAST) {
-            throw self::failed($form, ['form' => __('atrium-forms::forms.public.too_fast')]);
+            throw self::failed($request, $form, ['form' => __('atrium-forms::forms.public.too_fast')]);
         }
 
         $rules = [];
@@ -56,10 +57,15 @@ final class SubmitController
             $attributes["fields.{$field->name}"] = mb_strtolower((string) $field->label);
         }
 
+        // The site's captcha (atrium.captcha.driver), when one is on.
+        if (config('atrium-forms.captcha', true)) {
+            $rules = [...$rules, ...app(CaptchaManager::class)->rules()];
+        }
+
         $validator = Validator::make($request->all(), $rules, [], $attributes);
 
         if ($validator->fails()) {
-            throw self::failed($form, $validator->errors()->toArray());
+            throw self::failed($request, $form, $validator->errors()->toArray());
         }
 
         $default = $languages->default();
@@ -131,14 +137,22 @@ final class SubmitController
     }
 
     /**
+     * Back to the form with its errors and what the visitor typed, less the
+     * trap and the captcha (a used captcha is not asked again); JSON gets 422.
+     *
      * @param  array<string,mixed>  $errors
      */
-    public static function failed(Form|string $form, array $errors): ValidationException
+    public static function failed(Request $request, Form|string $form, array $errors): ValidationException
     {
         $code = $form instanceof Form ? $form->code : $form;
+        $exception = ValidationException::withMessages($errors)->errorBag(self::errorBag($code));
 
-        return ValidationException::withMessages($errors)
-            ->errorBag(self::errorBag($code))
-            ->redirectTo(url()->previous().'#form-'.$code);
+        if (! $request->expectsJson()) {
+            $exception->response = redirect()->to(url()->previous().'#form-'.$code)
+                ->withErrors($exception->errors(), self::errorBag($code))
+                ->withInput($request->except([(string) config('atrium-forms.honeypot'), SpamGuard::TIME_FIELD, ...CaptchaManager::INPUTS]));
+        }
+
+        return $exception;
     }
 }

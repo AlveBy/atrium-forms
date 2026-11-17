@@ -34,6 +34,12 @@ return [
     'min_seconds' => (int) env('ATRIUM_FORMS_MIN_SECONDS', 3),
 
     /*
+    | The site's captcha too (ATRIUM_CAPTCHA in config/atrium.php: image,
+    | recaptcha or none), on every form. False: never on the forms.
+    */
+    'captcha' => true,
+
+    /*
     |--------------------------------------------------------------------------
     | Rate limit
     |--------------------------------------------------------------------------

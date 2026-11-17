@@ -40,8 +40,9 @@ The markup is plain HTML with `atrium-form*` classes and a few styles that take 
 - A hidden field people never see and bots fill in. A submission with it filled is answered as sent and dropped.
 - The time the form was drawn, encrypted with the app key. A form sent sooner than `min_seconds` (3) after that, or without the time, is refused with "sent too quickly".
 - At most `per_minute` (5) submissions of one form from one IP address per minute.
+- The site's captcha, when one is on (`ATRIUM_CAPTCHA`: `image` built in, `recaptcha` for Google reCAPTCHA v2, `none` by default): every form asks it under its fields. `captcha => false` in `config/atrium-forms.php` keeps it off the forms.
 
-`php artisan vendor:publish --tag=atrium-forms-config` copies `config/atrium-forms.php` to change these, the honeypot field name and the address prefix; `ATRIUM_FORMS_MIN_SECONDS` and `ATRIUM_FORMS_PER_MINUTE` work without it.
+`php artisan vendor:publish --tag=atrium-forms-config` copies `config/atrium-forms.php` to change these, the honeypot field name, the captcha and the address prefix; `ATRIUM_FORMS_MIN_SECONDS` and `ATRIUM_FORMS_PER_MINUTE` work without it.
 
 ## Mail
 

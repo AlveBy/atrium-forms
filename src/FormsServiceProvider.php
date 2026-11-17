@@ -54,7 +54,7 @@ final class FormsServiceProvider extends ServiceProvider
                         return response()->json(['message' => $message], 429, $headers);
                     }
 
-                    throw SubmitController::failed($code, ['form' => $message]);
+                    throw SubmitController::failed($request, $code, ['form' => $message]);
                 });
         });
 
