@@ -127,6 +127,12 @@ class FormSubmission extends Model implements Administrable
         return false;
     }
 
+    /** Service records, not content: no custom fields, no link target. */
+    public static function isContentModule(): bool
+    {
+        return false;
+    }
+
     public static function getAdminLabel(): string
     {
         return __('atrium-forms::forms.modules.submissions');
