@@ -214,6 +214,17 @@ final class SnippetsTest extends TestCase
             TEXT, (new Snippets($form->load('fields')))->json());
     }
 
+    public function test_the_field_s_name_in_the_error_is_lowercased_in_any_alphabet(): void
+    {
+        $form = Form::query()->create(['name' => 'Call', 'code' => 'call']);
+        FormField::query()->create(['form_id' => $form->id, 'name' => 'name', 'type' => 'text', 'label' => 'Ваше Имя', 'required' => true]);
+
+        $json = (new Snippets($form->load('fields')))->json();
+
+        $this->assertStringContainsString('"message": "The ваше имя field is required."', $json);
+        $this->assertStringNotContainsString('Ваше Имя', $json);
+    }
+
     public function test_a_form_without_fields_answers_with_the_form_s_error(): void
     {
         $json = (new Snippets(Form::query()->create(['name' => 'Empty', 'code' => 'empty'])))->json();
@@ -228,7 +239,10 @@ final class SnippetsTest extends TestCase
         config(['atrium.captcha.driver' => 'image']);
         $snippets = new Snippets($this->contactForm()->load('fields'));
 
-        $this->assertStringContainsString("    <x-atrium::captcha data-error-for=\"captcha\" />\n\n    <button", $snippets->markup());
+        // The captcha comes after the form's own lines and fields, which stay.
+        $this->assertStringStartsWith('<form id="form-contact"', $snippets->markup());
+        $this->assertStringContainsString('    <div data-field="consent">', $snippets->markup());
+        $this->assertStringContainsString("    </div>\n\n    <x-atrium::captcha data-error-for=\"captcha\" />\n\n    <button", $snippets->markup());
         $this->assertStringEndsWith(<<<'JS'
                     form.reset();
                 }

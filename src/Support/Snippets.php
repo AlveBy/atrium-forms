@@ -126,7 +126,7 @@ final class Snippets
     public function json(): string
     {
         $field = $this->form->fields->first();
-        $message = (string) ($this->form->getTranslation('success_message', $this->locale) ?: __('atrium-forms::forms.public.sent', [], $this->locale));
+        $message = $this->form->getTranslation('success_message', $this->locale) ?: __('atrium-forms::forms.public.sent', [], $this->locale);
         $error = $field === null
             ? __('atrium-forms::forms.public.too_fast', [], $this->locale)
             : __('validation.required', ['attribute' => mb_strtolower((string) $field->getTranslation('label', $this->locale))], $this->locale);
