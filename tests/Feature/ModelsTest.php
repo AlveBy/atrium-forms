@@ -101,6 +101,14 @@ final class ModelsTest extends TestCase
         $this->assertSame([], (new FormField)->optionList());
     }
 
+    public function test_an_option_with_the_letter_x_in_cyrillic_stays_whole(): void
+    {
+        // The second byte of "х" (D1 85) is NEL to a byte-wise \R.
+        $field = new FormField(['options' => ['en' => "Сухари\rОрехи\r\nХлеб"]]);
+
+        $this->assertSame(['Сухари', 'Орехи', 'Хлеб'], $field->optionList());
+    }
+
     /**
      * @return array<string,array{0:string,1:bool,2:list<string>}>
      */

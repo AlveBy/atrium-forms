@@ -85,7 +85,7 @@ class FormField extends Model implements Administrable
      */
     public function optionList(): array
     {
-        $lines = preg_split('/\R/', (string) $this->getTranslation('options', app()->getLocale())) ?: [];
+        $lines = preg_split('/\r\n|\r|\n/', (string) $this->getTranslation('options', app()->getLocale())) ?: [];
 
         return array_values(array_unique(array_filter(array_map('trim', $lines), static fn (string $line): bool => $line !== '')));
     }
