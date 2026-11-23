@@ -11,10 +11,10 @@ declare(strict_types=1);
 return [
     'modules' => [
         'forms' => 'Formulare',
-        'form_fields' => 'Formularfelder',
         'submissions' => 'Einsendungen',
     ],
     'fields' => [
+        'builder' => 'Felder',
         'id' => 'ID',
         'active' => 'Aktiv',
         'name' => 'Name',
@@ -25,12 +25,6 @@ return [
         'updated_at' => 'Geändert',
         'submissions_count' => 'Einsendungen',
         'form' => 'Formular',
-        'label' => 'Beschriftung',
-        'field_name' => 'Feldcode',
-        'type' => 'Typ',
-        'required' => 'Pflichtfeld',
-        'options' => 'Optionen',
-        'sort' => 'Sortierung',
         'submitted_at' => 'Gesendet',
         'content' => 'Inhalt',
         'page_url' => 'Seite',
@@ -39,10 +33,9 @@ return [
         'user_agent' => 'Browser',
     ],
     'hints' => [
+        'builder' => 'Ein Feld nimmt 1 bis 12 Spalten ein; Felder, die nebeneinander passen, teilen sich eine Zeile. Auf dem Telefon nimmt jedes Feld die ganze Zeile ein.',
         'code' => 'Lateinische Buchstaben, Ziffern, „-“ und „_“. Auf einer Seite: <x-atrium-forms::form code="contact" />',
         'recipients' => 'E-Mail-Adressen, eine pro Zeile oder durch Kommas getrennt. Leer: Einsendungen werden nur hier gespeichert.',
-        'field_name' => 'Lateinische Buchstaben, Ziffern, „-“ und „_“; im Formular eindeutig.',
-        'options' => 'Für eine Liste oder Optionsfelder: eine Option pro Zeile.',
     ],
     'types' => [
         'text' => 'Text',
@@ -67,7 +60,6 @@ return [
     ],
     'validation' => [
         'recipients' => '„:email“ ist keine E-Mail-Adresse.',
-        'field_name_taken' => 'Dieses Formular hat bereits ein Feld mit diesem Code.',
     ],
     'mail' => [
         'subject' => 'Neue Einsendung: :form',

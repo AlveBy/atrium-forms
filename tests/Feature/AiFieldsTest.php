@@ -37,9 +37,9 @@ final class AiFieldsTest extends TestCase
 
     public function test_the_options_of_a_field_are_left_alone(): void
     {
-        foreach (['options'] as $name) {
-            $this->assertNull($this->field(FormField::class, $name)->toArray()['ai'] ?? null, $name);
-        }
+        // The fields, their options among them, are built on the form's own page.
+        $this->assertNull($this->field(Form::class, 'builder')->toArray()['ai'] ?? null);
+        $this->assertFalse(method_exists(FormField::class, 'getAdministrationFields'), 'A field of a form has no admin form of its own.');
     }
 
     /**

@@ -11,10 +11,10 @@ declare(strict_types=1);
 return [
     'modules' => [
         'forms' => 'Formulaires',
-        'form_fields' => 'Champs des formulaires',
         'submissions' => 'Envois',
     ],
     'fields' => [
+        'builder' => 'Champs',
         'id' => 'ID',
         'active' => 'Actif',
         'name' => 'Nom',
@@ -25,12 +25,6 @@ return [
         'updated_at' => 'Modifié',
         'submissions_count' => 'Envois',
         'form' => 'Formulaire',
-        'label' => 'Libellé',
-        'field_name' => 'Code du champ',
-        'type' => 'Type',
-        'required' => 'Obligatoire',
-        'options' => 'Options',
-        'sort' => 'Tri',
         'submitted_at' => 'Envoyé',
         'content' => 'Contenu',
         'page_url' => 'Page',
@@ -39,10 +33,9 @@ return [
         'user_agent' => 'Navigateur',
     ],
     'hints' => [
+        'builder' => 'Un champ occupe de 1 à 12 colonnes ; les champs qui tiennent côte à côte partagent une ligne. Sur un téléphone, chaque champ prend toute la ligne.',
         'code' => 'Lettres latines, chiffres, « - » et « _ ». Sur une page : <x-atrium-forms::form code="contact" />',
         'recipients' => 'Adresses e-mail, une par ligne ou séparées par des virgules. Vide : les envois sont seulement conservés ici.',
-        'field_name' => 'Lettres latines, chiffres, « - » et « _ » ; unique dans le formulaire.',
-        'options' => 'Pour une liste ou des boutons radio : une option par ligne.',
     ],
     'types' => [
         'text' => 'Texte',
@@ -67,7 +60,6 @@ return [
     ],
     'validation' => [
         'recipients' => '« :email » n’est pas une adresse e-mail.',
-        'field_name_taken' => 'Ce formulaire a déjà un champ avec ce code.',
     ],
     'mail' => [
         'subject' => 'Nouvel envoi : :form',

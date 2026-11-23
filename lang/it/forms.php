@@ -11,10 +11,10 @@ declare(strict_types=1);
 return [
     'modules' => [
         'forms' => 'Moduli',
-        'form_fields' => 'Campi dei moduli',
         'submissions' => 'Invii',
     ],
     'fields' => [
+        'builder' => 'Campi',
         'id' => 'ID',
         'active' => 'Attivo',
         'name' => 'Nome',
@@ -25,12 +25,6 @@ return [
         'updated_at' => 'Modificato',
         'submissions_count' => 'Invii',
         'form' => 'Modulo',
-        'label' => 'Etichetta',
-        'field_name' => 'Codice del campo',
-        'type' => 'Tipo',
-        'required' => 'Obbligatorio',
-        'options' => 'Opzioni',
-        'sort' => 'Ordinamento',
         'submitted_at' => 'Inviato',
         'content' => 'Contenuto',
         'page_url' => 'Pagina',
@@ -39,10 +33,9 @@ return [
         'user_agent' => 'Browser',
     ],
     'hints' => [
+        'builder' => 'Un campo occupa da 1 a 12 colonne; i campi che stanno affiancati condividono una riga. Su un telefono ogni campo occupa tutta la riga.',
         'code' => 'Lettere latine, cifre, «-» e «_». In una pagina: <x-atrium-forms::form code="contact" />',
         'recipients' => 'Indirizzi e-mail, uno per riga o separati da virgole. Vuoto: gli invii sono solo conservati qui.',
-        'field_name' => 'Lettere latine, cifre, «-» e «_»; unico nel modulo.',
-        'options' => 'Per un elenco o pulsanti di opzione: un’opzione per riga.',
     ],
     'types' => [
         'text' => 'Testo',
@@ -67,7 +60,6 @@ return [
     ],
     'validation' => [
         'recipients' => '«:email» non è un indirizzo e-mail.',
-        'field_name_taken' => 'Questo modulo ha già un campo con questo codice.',
     ],
     'mail' => [
         'subject' => 'Nuovo invio: :form',

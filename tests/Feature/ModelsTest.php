@@ -15,10 +15,7 @@ use Atrium\Forms\Models\Form;
 use Atrium\Forms\Models\FormField;
 use Atrium\Forms\Models\FormSubmission;
 use Atrium\Forms\Rules\EmailList;
-use Atrium\Forms\Rules\UniqueFieldName;
 use Atrium\Forms\Tests\TestCase;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -50,7 +47,7 @@ final class ModelsTest extends TestCase
     {
         $fields = $this->byName(Form::getAdministrationFields());
 
-        $this->assertSame(['active', 'name', 'code', 'recipients', 'button_label', 'success_message'], array_keys($fields));
+        $this->assertSame(['active', 'name', 'code', 'recipients', 'button_label', 'success_message', 'builder'], array_keys($fields));
         $this->assertTrue($fields['active']->getDefault());
         $this->assertContains('alpha_dash:ascii', $fields['code']->getValidationRules());
         $this->assertSame(
@@ -81,16 +78,6 @@ final class ModelsTest extends TestCase
 
         $valid ? $response->assertSessionHasNoErrors() : $response->assertSessionHasErrors('code');
         $this->assertSame($valid ? 1 : 0, Form::query()->count());
-    }
-
-    public function test_a_field_names_its_form(): void
-    {
-        $form = $this->contactForm();
-        $field = FormField::query()->where('form_id', $form->id)->firstOrFail();
-
-        $this->assertSame('Contact us', $field->getFormNameAttribute());
-        $this->assertSame('Contact us', $field->toArray()['form_name']);
-        $this->assertSame('', (new FormField)->form_name);
     }
 
     public function test_the_options_are_one_per_line_without_blanks_or_repeats(): void
@@ -174,24 +161,6 @@ final class ModelsTest extends TestCase
         $field = new FormField(['type' => $type, 'required' => false, 'options' => ['en' => "Order\nDelivery"]]);
 
         $this->assertSame($valid, Validator::make(['value' => $value], ['value' => $field->publicRules()])->passes());
-    }
-
-    public function test_the_field_form_of_the_panel(): void
-    {
-        $fields = $this->byName(FormField::getAdministrationFields());
-
-        $this->assertSame(['form_id', 'label', 'name', 'type', 'required', 'options', 'sort'], array_keys($fields));
-        $this->assertSame(
-            array_combine(FormField::TYPES, array_map(fn (string $type): string => __("atrium-forms::forms.types.{$type}"), FormField::TYPES)),
-            array_column($fields['type']->toArray()['options'], 'label', 'value'),
-        );
-        $this->assertSame('E-mail', array_column($fields['type']->toArray()['options'], 'label', 'value')['email']);
-        $this->assertSame('text', $fields['type']->getDefault());
-        $this->assertSame(500, $fields['sort']->getDefault());
-        $this->assertSame(
-            ['id', 'form_name', 'label', 'name', 'type', 'required', 'sort'],
-            array_map(fn ($column): string => $column->getName(), FormField::getAdministrationListColumns()),
-        );
     }
 
     public function test_the_hooks_of_a_submission_are_public_api(): void
@@ -359,50 +328,6 @@ final class ModelsTest extends TestCase
     }
 
     /**
-     * @return array<string,array{0:bool,1:bool,2:string,3:bool}>
-     */
-    public static function fieldNames(): array
-    {
-        return [
-            // form sent?, editing a field?, the name, valid?
-            'a new field, a new name' => [true, false, 'phone', true],
-            'a new field, a taken name' => [true, false, 'email', false],
-            'a name taken in another form only' => [true, false, 'other', true],
-            'the field keeps its own name' => [true, true, 'name', true],
-            'the field takes a sibling name' => [true, true, 'email', false],
-            'the API leaves the form out: the field own form' => [false, true, 'email', false],
-            'the API leaves the form out, its own name' => [false, true, 'name', true],
-            'no form at all' => [false, false, 'email', true],
-        ];
-    }
-
-    #[DataProvider('fieldNames')]
-    public function test_a_field_name_is_one_per_form(bool $withForm, bool $editing, string $name, bool $valid): void
-    {
-        $form = $this->contactForm();
-        $edited = FormField::query()->where('form_id', $form->id)->where('name', 'name')->sole();
-        $other = Form::query()->create(['name' => 'Other', 'code' => 'other']);
-        FormField::query()->create(['form_id' => $other->id, 'name' => 'other', 'type' => 'text', 'label' => 'Other']);
-
-        $this->useRequest($withForm ? ['form_id' => $form->id] : [], $editing ? $edited->id : null);
-
-        $this->assertSame($valid, Validator::make(['name' => $name], ['name' => [new UniqueFieldName]])->passes());
-    }
-
-    public function test_a_field_moved_to_another_form_is_checked_there(): void
-    {
-        $form = $this->contactForm();
-        $edited = FormField::query()->where('form_id', $form->id)->where('name', 'name')->sole();
-        $other = Form::query()->create(['name' => 'Other', 'code' => 'other']);
-        FormField::query()->create(['form_id' => $other->id, 'name' => 'name', 'type' => 'text', 'label' => 'Name']);
-
-        $this->useRequest(['form_id' => $other->id], $edited->id);
-        $validator = Validator::make(['name' => 'name'], ['name' => [new UniqueFieldName]]);
-
-        $this->assertSame(['This form already has a field with this code.'], $validator->errors()->get('name'));
-    }
-
-    /**
      * @param  array<int,Field>  $fields
      * @return array<string,Field>
      */
@@ -425,17 +350,5 @@ final class ModelsTest extends TestCase
         ])->save();
 
         return $submission;
-    }
-
-    /**
-     * @param  array<string,mixed>  $input
-     */
-    private function useRequest(array $input, ?int $id): void
-    {
-        $request = Request::create('/admin/form_fields'.($id ? "/{$id}" : ''), $id ? 'PUT' : 'POST', $input);
-        $route = (new Route($id ? 'PUT' : 'POST', 'admin/form_fields/{id?}', []))->bind($request);
-        $route->setParameter('id', $id);
-        $request->setRouteResolver(fn () => $route);
-        $this->app->instance('request', $request);
     }
 }

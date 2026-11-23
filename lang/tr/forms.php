@@ -11,10 +11,10 @@ declare(strict_types=1);
 return [
     'modules' => [
         'forms' => 'Formlar',
-        'form_fields' => 'Form alanları',
         'submissions' => 'Gönderimler',
     ],
     'fields' => [
+        'builder' => 'Alanlar',
         'id' => 'ID',
         'active' => 'Etkin',
         'name' => 'Ad',
@@ -25,12 +25,6 @@ return [
         'updated_at' => 'Güncellendi',
         'submissions_count' => 'Gönderimler',
         'form' => 'Form',
-        'label' => 'Etiket',
-        'field_name' => 'Alan kodu',
-        'type' => 'Tür',
-        'required' => 'Zorunlu',
-        'options' => 'Seçenekler',
-        'sort' => 'Sıralama',
         'submitted_at' => 'Gönderildi',
         'content' => 'İçerik',
         'page_url' => 'Sayfa',
@@ -39,10 +33,9 @@ return [
         'user_agent' => 'Tarayıcı',
     ],
     'hints' => [
+        'builder' => 'Bir alan 1 ile 12 sütun arasında yer kaplar; yan yana sığan alanlar aynı satırı paylaşır. Telefonda her alan tüm satırı kaplar.',
         'code' => 'Latin harfleri, rakamlar, "-" ve "_". Bir sayfada: <x-atrium-forms::form code="contact" />',
         'recipients' => 'E-posta adresleri, her satıra bir tane veya virgülle ayrılmış. Boş: gönderimler yalnızca burada saklanır.',
-        'field_name' => 'Latin harfleri, rakamlar, "-" ve "_"; form içinde benzersiz.',
-        'options' => 'Liste veya seçenek düğmeleri için: her satıra bir seçenek.',
     ],
     'types' => [
         'text' => 'Metin',
@@ -67,7 +60,6 @@ return [
     ],
     'validation' => [
         'recipients' => '":email" bir e-posta adresi değil.',
-        'field_name_taken' => 'Bu formda bu koda sahip bir alan zaten var.',
     ],
     'mail' => [
         'subject' => 'Yeni gönderim: :form',

@@ -11,17 +11,18 @@ php artisan atrium:module:install alveby/atrium-forms
 
 `atrium:module:install` creates the tables and turns the module on; `atrium:module:remove alveby/atrium-forms` turns it off and asks whether to keep the forms and submissions.
 
-The admin gets three entries:
+The admin gets two entries:
 
 | Entry | What it holds |
 |---|---|
-| Forms | name, code, the addresses submissions are mailed to, the button text and the message after sending (both per content language), on/off; the list shows how many submissions each form has |
-| Form fields | the form, label (per content language), field code, type, required, options, sort |
+| Forms | name, code, the addresses submissions are mailed to, the button text and the message after sending (both per content language), on/off, and the fields; the list shows how many submissions each form has |
 | Submissions | what was sent, with the form, page, language, IP address and browser; read and deleted, never edited |
 
 The number of submissions is kept on the form (`forms.submissions_count`): it goes up when a submission is stored and down when one is deleted in the admin, so the list does not count them on every page.
 
-Forms belong to sites: each site has its own, and the lists show the current site's forms, fields and submissions. Each entry has the usual four permissions in the role form; give an editor `form_submissions.view` to read the submissions.
+The fields are built on the form's own page: pick a type to add one, drag it into place, open it to set the label, code, type, required, options, the text shown in an empty field, a hint under it, the least and most (characters for text, the value for a number) and its width, from the whole row down to 1 of 12 columns. Fields side by side share a row on a computer and stand one under another on a phone; the preview beside them shows both. Saving keeps a field's id while it stays in the list, so its column in the submissions stays too.
+
+Forms belong to sites: each site has its own, and the lists show the current site's forms and submissions. Each entry has the usual four permissions in the role form; give an editor `form_submissions.view` to read the submissions.
 
 Field types: text, e-mail, phone, number, date, long text, list, radio buttons, checkbox. A list and radio buttons take their options one per line, in each language. The rules follow the type: a valid e-mail, a phone of digits and `+()-.`, one of the options, a required checkbox must be ticked.
 

@@ -11,10 +11,10 @@ declare(strict_types=1);
 return [
     'modules' => [
         'forms' => 'Formularze',
-        'form_fields' => 'Pola formularzy',
         'submissions' => 'Zgłoszenia',
     ],
     'fields' => [
+        'builder' => 'Pola',
         'id' => 'ID',
         'active' => 'Aktywny',
         'name' => 'Nazwa',
@@ -25,12 +25,6 @@ return [
         'updated_at' => 'Zmieniono',
         'submissions_count' => 'Zgłoszenia',
         'form' => 'Formularz',
-        'label' => 'Etykieta',
-        'field_name' => 'Kod pola',
-        'type' => 'Typ',
-        'required' => 'Wymagane',
-        'options' => 'Opcje',
-        'sort' => 'Sortowanie',
         'submitted_at' => 'Wysłano',
         'content' => 'Treść',
         'page_url' => 'Strona',
@@ -39,10 +33,9 @@ return [
         'user_agent' => 'Przeglądarka',
     ],
     'hints' => [
+        'builder' => 'Pole zajmuje od 1 do 12 kolumn; pola, które mieszczą się obok siebie, dzielą wiersz. Na telefonie każde pole zajmuje cały wiersz.',
         'code' => 'Litery łacińskie, cyfry, „-” i „_”. Na stronie: <x-atrium-forms::form code="contact" />',
         'recipients' => 'Adresy e-mail, po jednym w wierszu lub oddzielone przecinkami. Puste: zgłoszenia są tylko przechowywane tutaj.',
-        'field_name' => 'Litery łacińskie, cyfry, „-” i „_”; unikalny w formularzu.',
-        'options' => 'Dla listy lub przycisków opcji: jedna opcja w wierszu.',
     ],
     'types' => [
         'text' => 'Tekst',
@@ -67,7 +60,6 @@ return [
     ],
     'validation' => [
         'recipients' => '„:email” nie jest adresem e-mail.',
-        'field_name_taken' => 'Ten formularz ma już pole z tym kodem.',
     ],
     'mail' => [
         'subject' => 'Nowe zgłoszenie: :form',

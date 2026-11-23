@@ -11,10 +11,10 @@ declare(strict_types=1);
 return [
     'modules' => [
         'forms' => '表单',
-        'form_fields' => '表单字段',
         'submissions' => '提交记录',
     ],
     'fields' => [
+        'builder' => '字段',
         'id' => 'ID',
         'active' => '启用',
         'name' => '名称',
@@ -25,12 +25,6 @@ return [
         'updated_at' => '更新时间',
         'submissions_count' => '提交数',
         'form' => '表单',
-        'label' => '标签',
-        'field_name' => '字段代码',
-        'type' => '类型',
-        'required' => '必填',
-        'options' => '选项',
-        'sort' => '排序',
         'submitted_at' => '提交时间',
         'content' => '内容',
         'page_url' => '页面',
@@ -39,10 +33,9 @@ return [
         'user_agent' => '浏览器',
     ],
     'hints' => [
+        'builder' => '每个字段占 1 到 12 列；放得下的字段并排在同一行。在手机上每个字段占满整行。',
         'code' => '拉丁字母、数字、“-”和“_”。在页面中: <x-atrium-forms::form code="contact" />',
         'recipients' => '电子邮件地址，每行一个或用逗号分隔。留空则提交只保存在这里。',
-        'field_name' => '拉丁字母、数字、“-”和“_”；在表单内唯一。',
-        'options' => '用于列表或单选按钮：每行一个选项。',
     ],
     'types' => [
         'text' => '文本',
@@ -67,7 +60,6 @@ return [
     ],
     'validation' => [
         'recipients' => '“:email”不是电子邮件地址。',
-        'field_name_taken' => '此表单已有使用该代码的字段。',
     ],
     'mail' => [
         'subject' => '新提交：:form',

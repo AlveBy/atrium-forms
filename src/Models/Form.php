@@ -14,8 +14,10 @@ use Atrium\Admin\Columns\DateColumn;
 use Atrium\Admin\Columns\TextColumn;
 use Atrium\Admin\Contracts\Administrable;
 use Atrium\Admin\Fields\CheckboxField;
+use Atrium\Admin\Fields\FormBuilderField;
 use Atrium\Admin\Fields\TextareaField;
 use Atrium\Admin\Fields\TextField;
+use Atrium\Admin\Support\ContentLanguages;
 use Atrium\Admin\Traits\BelongsToSite;
 use Atrium\Admin\Traits\InteractsWithAdmin;
 use Atrium\Admin\Traits\Translatable;
@@ -23,9 +25,11 @@ use Atrium\Forms\Rules\EmailList;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 
 /**
- * A form of one site. Its fields are records of their own (FormField); the
+ * A form of one site. Its fields (FormField) are built on its own page, as
+ * the `builder` attribute; the API reads and writes the same attribute. The
  * site shows it with <x-atrium-forms::form code="…" />.
  *
  * @property int $id
@@ -35,6 +39,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property bool $active
  * @property string|null $recipients
  * @property int $submissions_count
+ * @property-read array<int,array<string,mixed>> $builder
  * @property-read Collection<int,FormField> $fields
  */
 class Form extends Model implements Administrable
@@ -47,6 +52,9 @@ class Form extends Model implements Administrable
     protected array $translatable = ['button_label', 'success_message'];
 
     protected $fillable = ['site_id', 'name', 'code', 'active', 'recipients', 'button_label', 'success_message'];
+
+    /** @var list<string> */
+    protected $appends = ['builder'];
 
     protected function casts(): array
     {
@@ -127,7 +135,124 @@ class Form extends Model implements Administrable
             TextareaField::make('success_message')
                 ->label(__('atrium-forms::forms.fields.success_message'))
                 ->placeholder(__('atrium-forms::forms.public.sent')),
+            FormBuilderField::make('builder')
+                ->label(__('atrium-forms::forms.fields.builder'))
+                ->hint(__('atrium-forms::forms.hints.builder'))
+                ->types(self::typeLabels())
+                ->choiceTypes(FormField::CHOICE_TYPES),
         ];
+    }
+
+    /**
+     * @return array<string,string>
+     */
+    private static function typeLabels(): array
+    {
+        $types = [];
+
+        foreach (FormField::TYPES as $type) {
+            $types[$type] = __("atrium-forms::forms.types.{$type}");
+        }
+
+        return $types;
+    }
+
+    /**
+     * The fields as the builder and the API see them.
+     *
+     * @return array<int,array<string,mixed>>
+     */
+    protected function getBuilderAttribute(): array
+    {
+        return $this->fields->map(fn (FormField $field): array => [
+            'id' => $field->id,
+            'name' => $field->name,
+            'type' => $field->type,
+            'required' => $field->required,
+            'width' => $field->width,
+            'min' => $field->min,
+            'max' => $field->max,
+            'label' => $field->getTranslations('label'),
+            'hint' => $field->getTranslations('hint'),
+            'placeholder' => $field->getTranslations('placeholder'),
+            'options' => $field->getTranslations('options'),
+        ])->all();
+    }
+
+    /**
+     * Writes the fields from the builder. A field keeps its id (and its
+     * place in the submissions) while it is in the list; new ones are
+     * created, the ones taken out are deleted. A save without the builder
+     * (an API call that changes only the name) leaves the fields as they are.
+     *
+     * @param  array<string,mixed>  $data
+     */
+    public function afterAdminSave(array $data): void
+    {
+        if (! is_array($data['builder'] ?? null)) {
+            return;
+        }
+
+        $codes = app(ContentLanguages::class)->codes();
+
+        DB::transaction(function () use ($data, $codes): void {
+            $existing = $this->fields()->pluck('id')->all();
+            $kept = [];
+
+            foreach (array_values($data['builder']) as $index => $item) {
+                $attributes = [
+                    'name' => $item['name'],
+                    'type' => $item['type'],
+                    'required' => $item['required'] ?? false,
+                    'width' => $item['width'],
+                    'min' => self::bound($item, 'min'),
+                    'max' => self::bound($item, 'max'),
+                    'sort' => ($index + 1) * 10,
+                ];
+
+                foreach (['label', 'hint', 'placeholder', 'options'] as $text) {
+                    $attributes[$text] = self::texts($item[$text] ?? [], $codes);
+                }
+
+                $field = in_array($item['id'] ?? null, $existing, false) ? $this->fields()->find($item['id']) : $this->fields()->make();
+                $field->fill($attributes)->save();
+                $kept[] = $field->id;
+            }
+
+            $this->fields()->whereKeyNot($kept)->delete();
+        });
+
+        $this->unsetRelation('fields');
+    }
+
+    /**
+     * @param  array<string,mixed>  $item
+     */
+    private static function bound(array $item, string $name): ?int
+    {
+        return in_array($item['type'], FormField::BOUNDED_TYPES) && is_numeric($item[$name] ?? null) ? (int) $item[$name] : null;
+    }
+
+    /**
+     * The texts of the site's languages, trimmed; empty ones are left out.
+     *
+     * @param  array<string,mixed>  $texts
+     * @param  array<int,string>  $codes
+     * @return array<string,string>
+     */
+    private static function texts(array $texts, array $codes): array
+    {
+        $kept = [];
+
+        foreach ($codes as $code) {
+            $text = trim($texts[$code] ?? '');
+
+            if ($text !== '') {
+                $kept[$code] = $text;
+            }
+        }
+
+        return $kept;
     }
 
     public static function getAdministrationListColumns(): array

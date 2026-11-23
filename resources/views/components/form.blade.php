@@ -4,8 +4,11 @@
 --}}
 @once
 <style>
-    .atrium-form { display: grid; gap: 1rem; max-width: 36rem; }
-    .atrium-form__field { display: grid; gap: .35rem; }
+    .atrium-form { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 1rem; max-width: 40rem; }
+    .atrium-form > * { grid-column: 1 / -1; }
+    .atrium-form > .atrium-form__field { grid-column: span var(--atrium-span, 12) / span var(--atrium-span, 12); display: grid; gap: .35rem; align-content: start; }
+    @media (max-width: 40rem) { .atrium-form > .atrium-form__field { grid-column: 1 / -1; } }
+    .atrium-form__hint { margin: 0; font-size: .875em; }
     .atrium-form__field input:not([type=checkbox]):not([type=radio]), .atrium-form__field select, .atrium-form__field textarea { font: inherit; padding: .5rem .6rem; border: 1px solid var(--control, #6b7280); border-radius: .375rem; background: var(--bg, #fff); color: var(--text, inherit); }
     .atrium-form__choice { display: flex; gap: .5rem; align-items: center; }
     .atrium-form__error { color: #b91c1c; margin: 0; }
@@ -42,15 +45,20 @@
             $key = 'fields.'.$field->name;
             $value = $old[$field->name] ?? '';
             $invalid = $errors->has($key);
+            $hint = (string) $field->hint;
+            $described = trim(($hint !== '' ? $id.'-hint ' : '').($invalid ? $id.'-error' : ''));
+            $bounds = in_array($field->type, \Atrium\Forms\Models\FormField::BOUNDED_TYPES, true)
+                ? ($field->type === 'number' ? ['min' => $field->min, 'max' => $field->max] : ['minlength' => $field->min, 'maxlength' => $field->max])
+                : [];
         @endphp
-        <div class="atrium-form__field">
+        <div class="atrium-form__field" style="--atrium-span: {{ $field->width }}" data-field="{{ $field->name }}">
             @if ($field->type === 'checkbox')
                 <label class="atrium-form__choice">
-                    <input type="checkbox" id="{{ $id }}" name="{{ $name }}" value="1" @checked($value) @required($field->required) @if ($invalid) aria-invalid="true" aria-describedby="{{ $id }}-error" @endif>
+                    <input type="checkbox" id="{{ $id }}" name="{{ $name }}" value="1" @checked($value) @required($field->required) @if ($invalid) aria-invalid="true" @endif @if ($described !== '') aria-describedby="{{ $described }}" @endif>
                     {{ $field->label }}
                 </label>
             @elseif ($field->type === 'radio')
-                <fieldset @if ($invalid) aria-describedby="{{ $id }}-error" @endif>
+                <fieldset @if ($described !== '') aria-describedby="{{ $described }}" @endif>
                     <legend>{{ $field->label }}</legend>
                     @foreach ($field->optionList() as $index => $option)
                         <label class="atrium-form__choice">
@@ -62,17 +70,20 @@
             @else
                 <label for="{{ $id }}">{{ $field->label }}</label>
                 @if ($field->type === 'textarea')
-                    <textarea id="{{ $id }}" name="{{ $name }}" rows="5" @required($field->required) @if ($invalid) aria-invalid="true" aria-describedby="{{ $id }}-error" @endif>{{ $value }}</textarea>
+                    <textarea id="{{ $id }}" name="{{ $name }}" rows="5" placeholder="{{ $field->placeholder }}" @foreach (array_filter($bounds, 'is_int') as $attribute => $bound) {{ $attribute }}="{{ $bound }}" @endforeach @required($field->required) @if ($invalid) aria-invalid="true" @endif @if ($described !== '') aria-describedby="{{ $described }}" @endif>{{ $value }}</textarea>
                 @elseif ($field->type === 'select')
-                    <select id="{{ $id }}" name="{{ $name }}" @required($field->required) @if ($invalid) aria-invalid="true" aria-describedby="{{ $id }}-error" @endif>
+                    <select id="{{ $id }}" name="{{ $name }}" @required($field->required) @if ($invalid) aria-invalid="true" @endif @if ($described !== '') aria-describedby="{{ $described }}" @endif>
                         <option value="">{{ __('atrium-forms::forms.public.choose') }}</option>
                         @foreach ($field->optionList() as $option)
                             <option value="{{ $option }}" @selected($value === $option)>{{ $option }}</option>
                         @endforeach
                     </select>
                 @else
-                    <input type="{{ $field->type }}" id="{{ $id }}" name="{{ $name }}" value="{{ $value }}" @required($field->required) @if ($invalid) aria-invalid="true" aria-describedby="{{ $id }}-error" @endif>
+                    <input type="{{ $field->type }}" id="{{ $id }}" name="{{ $name }}" value="{{ $value }}" placeholder="{{ $field->placeholder }}" @foreach (array_filter($bounds, 'is_int') as $attribute => $bound) {{ $attribute }}="{{ $bound }}" @endforeach @required($field->required) @if ($invalid) aria-invalid="true" @endif @if ($described !== '') aria-describedby="{{ $described }}" @endif>
                 @endif
+            @endif
+            @if ($hint !== '')
+                <p class="atrium-form__hint" id="{{ $id }}-hint">{{ $hint }}</p>
             @endif
             @if ($invalid)
                 <p class="atrium-form__error" id="{{ $id }}-error">{{ $errors->first($key) }}</p>

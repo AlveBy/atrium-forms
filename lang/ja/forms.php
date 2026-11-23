@@ -11,10 +11,10 @@ declare(strict_types=1);
 return [
     'modules' => [
         'forms' => 'フォーム',
-        'form_fields' => 'フォームの項目',
         'submissions' => '送信内容',
     ],
     'fields' => [
+        'builder' => '項目',
         'id' => 'ID',
         'active' => '有効',
         'name' => '名前',
@@ -25,12 +25,6 @@ return [
         'updated_at' => '更新日',
         'submissions_count' => '送信数',
         'form' => 'フォーム',
-        'label' => 'ラベル',
-        'field_name' => '項目コード',
-        'type' => '種類',
-        'required' => '必須',
-        'options' => '選択肢',
-        'sort' => '並び順',
         'submitted_at' => '送信日時',
         'content' => '内容',
         'page_url' => 'ページ',
@@ -39,10 +33,9 @@ return [
         'user_agent' => 'ブラウザ',
     ],
     'hints' => [
+        'builder' => '各項目は 1〜12 列を使います。横に並べて収まる項目は同じ行に並びます。スマートフォンでは各項目が1行全体を使います。',
         'code' => '半角英字、数字、「-」と「_」。ページでは: <x-atrium-forms::form code="contact" />',
         'recipients' => 'メールアドレス。1行に1つ、またはカンマ区切り。空欄の場合、送信内容はここに保存されるだけです。',
-        'field_name' => '半角英字、数字、「-」と「_」。フォーム内で一意。',
-        'options' => 'リストまたはラジオボタン用: 1行に1つの選択肢。',
     ],
     'types' => [
         'text' => 'テキスト',
@@ -67,7 +60,6 @@ return [
     ],
     'validation' => [
         'recipients' => '「:email」はメールアドレスではありません。',
-        'field_name_taken' => 'このフォームには同じコードの項目がすでにあります。',
     ],
     'mail' => [
         'subject' => '新しい送信: :form',

@@ -11,10 +11,10 @@ declare(strict_types=1);
 return [
     'modules' => [
         'forms' => 'Shakllar',
-        'form_fields' => 'Shakl maydonlari',
         'submissions' => 'Arizalar',
     ],
     'fields' => [
+        'builder' => 'Maydonlar',
         'id' => 'ID',
         'active' => 'Faol',
         'name' => 'Nomi',
@@ -25,12 +25,6 @@ return [
         'updated_at' => 'O‘zgartirilgan',
         'submissions_count' => 'Arizalar',
         'form' => 'Shakl',
-        'label' => 'Yorliq',
-        'field_name' => 'Maydon kodi',
-        'type' => 'Turi',
-        'required' => 'Majburiy',
-        'options' => 'Variantlar',
-        'sort' => 'Saralash',
         'submitted_at' => 'Yuborilgan',
         'content' => 'Mazmuni',
         'page_url' => 'Sahifa',
@@ -39,10 +33,9 @@ return [
         'user_agent' => 'Brauzer',
     ],
     'hints' => [
+        'builder' => 'Maydon 1 dan 12 gacha ustun egallaydi; yonma-yon sig\'adigan maydonlar bir qatorga turadi. Telefonda har bir maydon butun qatorni egallaydi.',
         'code' => 'Lotin harflari, raqamlar, «-» va «_». Sahifada: <x-atrium-forms::form code="contact" />',
         'recipients' => 'Pochta manzillari, har qatorda bittadan yoki vergul bilan. Bo‘sh bo‘lsa — arizalar faqat shu yerda saqlanadi.',
-        'field_name' => 'Lotin harflari, raqamlar, «-» va «_»; shaklda takrorlanmaydi.',
-        'options' => 'Ro‘yxat va almashtirgichlar uchun: har qatorda bitta variant.',
     ],
     'types' => [
         'text' => 'Matn',
@@ -67,7 +60,6 @@ return [
     ],
     'validation' => [
         'recipients' => '«:email» pochta manzili emas.',
-        'field_name_taken' => 'Bu shaklda shu kodli maydon allaqachon bor.',
     ],
     'mail' => [
         'subject' => 'Yangi ariza: :form',

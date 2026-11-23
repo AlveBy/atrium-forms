@@ -10,10 +10,10 @@ declare(strict_types=1);
 return [
     'modules' => [
         'forms' => 'Forms',
-        'form_fields' => 'Form fields',
         'submissions' => 'Submissions',
     ],
     'fields' => [
+        'builder' => 'Fields',
         'id' => 'ID',
         'active' => 'Active',
         'name' => 'Name',
@@ -24,12 +24,6 @@ return [
         'updated_at' => 'Updated',
         'submissions_count' => 'Submissions',
         'form' => 'Form',
-        'label' => 'Label',
-        'field_name' => 'Field code',
-        'type' => 'Type',
-        'required' => 'Required',
-        'options' => 'Options',
-        'sort' => 'Sort',
         'submitted_at' => 'Sent',
         'content' => 'Content',
         'page_url' => 'Page',
@@ -38,10 +32,9 @@ return [
         'user_agent' => 'Browser',
     ],
     'hints' => [
+        'builder' => 'Each field takes 1 to 12 columns; fields that fit side by side share a row. On a phone every field takes the whole row.',
         'code' => 'Latin letters, digits, "-" and "_". On a page: <x-atrium-forms::form code="contact" />',
         'recipients' => 'E-mail addresses, one per line or separated by commas. Empty: submissions are only kept here.',
-        'field_name' => 'Latin letters, digits, "-" and "_"; unique within the form.',
-        'options' => 'For a list or radio buttons: one option per line.',
     ],
     'types' => [
         'text' => 'Text',
@@ -66,7 +59,6 @@ return [
     ],
     'validation' => [
         'recipients' => '":email" is not an e-mail address.',
-        'field_name_taken' => 'This form already has a field with this code.',
     ],
     'mail' => [
         'subject' => 'New submission: :form',
