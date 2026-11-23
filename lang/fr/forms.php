@@ -48,6 +48,17 @@ return [
         'radio' => 'Boutons radio',
         'checkbox' => 'Case à cocher',
     ],
+    'snippets' => [
+        'label' => 'Sur le site',
+        'blade' => 'Dans un gabarit Blade',
+        'markup' => 'Votre propre balisage',
+        'markup_note' => 'Pour un gabarit de ce site : les champs cachés portent le jeton et la protection anti-spam. Les textes sont dans la langue principale du site.',
+        'script_note' => 'Pour l\'envoyer sans recharger la page, ajoutez data-atrium-form à la balise <form> et incluez le script une fois sur la page :',
+        'fetch' => 'Envoi par votre propre script',
+        'fetch_note' => 'Le même balisage, envoyé avec fetch :',
+        'json' => 'Ce que répond le serveur',
+        'json_note' => 'Avec un captcha activé, chaque réponse apporte "captcha", un nouveau à la place de celui utilisé.',
+    ],
     'public' => [
         'submit' => 'Envoyer',
         'sent' => 'Merci ! Votre message a été envoyé.',

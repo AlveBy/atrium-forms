@@ -47,6 +47,17 @@ return [
         'radio' => 'Radio buttons',
         'checkbox' => 'Checkbox',
     ],
+    'snippets' => [
+        'label' => 'On a site',
+        'blade' => 'In a Blade template',
+        'markup' => 'Markup of your own',
+        'markup_note' => 'For a template of this site: the hidden fields carry the token and the anti-spam check. The texts are in the site\'s default language.',
+        'script_note' => 'To send it without reloading the page, add data-atrium-form to the <form> and put the script on the page once:',
+        'fetch' => 'Sent by a script of your own',
+        'fetch_note' => 'The same markup, sent with fetch:',
+        'json' => 'What the server answers',
+        'json_note' => 'With a captcha on, every answer brings "captcha", a new one in place of the used one.',
+    ],
     'public' => [
         'submit' => 'Send',
         'sent' => 'Thank you! Your message has been sent.',

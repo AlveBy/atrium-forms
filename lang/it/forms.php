@@ -48,6 +48,17 @@ return [
         'radio' => 'Pulsanti di opzione',
         'checkbox' => 'Casella di controllo',
     ],
+    'snippets' => [
+        'label' => 'Sul sito',
+        'blade' => 'In un template Blade',
+        'markup' => 'Markup personalizzato',
+        'markup_note' => 'Per un template di questo sito: i campi nascosti portano il token e la protezione antispam. I testi sono nella lingua principale del sito.',
+        'script_note' => 'Per inviarlo senza ricaricare la pagina, aggiungi data-atrium-form al <form> e includi lo script una volta nella pagina:',
+        'fetch' => 'Invio con uno script proprio',
+        'fetch_note' => 'Lo stesso markup, inviato con fetch:',
+        'json' => 'Cosa risponde il server',
+        'json_note' => 'Con il captcha attivo, ogni risposta porta "captcha", uno nuovo al posto di quello usato.',
+    ],
     'public' => [
         'submit' => 'Invia',
         'sent' => 'Grazie! Il tuo messaggio è stato inviato.',

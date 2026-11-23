@@ -48,6 +48,17 @@ return [
         'radio' => 'Almashtirgichlar',
         'checkbox' => 'Belgilash katagi',
     ],
+    'snippets' => [
+        'label' => 'Saytda',
+        'blade' => 'Blade shablonida',
+        'markup' => 'O\'z belgilashingiz',
+        'markup_note' => 'Ushbu saytning shabloni uchun: yashirin maydonlarda token va spamdan himoya bor. Matnlar saytning asosiy tilida.',
+        'script_note' => 'Shakl sahifani qayta yuklamasdan yuborilishi uchun <form> tegiga data-atrium-form qo\'shing va skriptni sahifaga bir marta ulang:',
+        'fetch' => 'O\'z skriptingiz bilan yuborish',
+        'fetch_note' => 'Xuddi shu belgilash, fetch orqali yuboriladi:',
+        'json' => 'Server nima javob beradi',
+        'json_note' => 'Captcha yoqilgan bo\'lsa, har bir javobda "captcha" bor — ishlatilgani o\'rniga yangisi.',
+    ],
     'public' => [
         'submit' => 'Yuborish',
         'sent' => 'Rahmat! Xabaringiz yuborildi.',

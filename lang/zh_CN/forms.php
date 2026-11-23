@@ -48,6 +48,17 @@ return [
         'radio' => '单选按钮',
         'checkbox' => '复选框',
     ],
+    'snippets' => [
+        'label' => '放到网站上',
+        'blade' => '在 Blade 模板中',
+        'markup' => '自定义标记',
+        'markup_note' => '用于本站的模板：隐藏字段携带令牌和反垃圾校验。文字使用网站的默认语言。',
+        'script_note' => '要在不刷新页面的情况下提交，请给 <form> 加上 data-atrium-form，并在页面上引入一次脚本：',
+        'fetch' => '用自己的脚本提交',
+        'fetch_note' => '同样的标记，用 fetch 提交：',
+        'json' => '服务器的响应',
+        'json_note' => '启用验证码时，每个响应都带有 "captcha"，用来替换已用过的验证码。',
+    ],
     'public' => [
         'submit' => '提交',
         'sent' => '谢谢！您的消息已发送。',

@@ -14,6 +14,7 @@ use Atrium\Admin\Columns\DateColumn;
 use Atrium\Admin\Columns\TextColumn;
 use Atrium\Admin\Contracts\Administrable;
 use Atrium\Admin\Fields\CheckboxField;
+use Atrium\Admin\Fields\DisplayField;
 use Atrium\Admin\Fields\FormBuilderField;
 use Atrium\Admin\Fields\TextareaField;
 use Atrium\Admin\Fields\TextField;
@@ -22,6 +23,7 @@ use Atrium\Admin\Traits\BelongsToSite;
 use Atrium\Admin\Traits\InteractsWithAdmin;
 use Atrium\Admin\Traits\Translatable;
 use Atrium\Forms\Rules\EmailList;
+use Atrium\Forms\Support\Snippets;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -140,6 +142,9 @@ class Form extends Model implements Administrable
                 ->hint(__('atrium-forms::forms.hints.builder'))
                 ->types(self::typeLabels())
                 ->choiceTypes(FormField::CHOICE_TYPES),
+            DisplayField::make('snippets')
+                ->label(__('atrium-forms::forms.snippets.label'))
+                ->html(static fn (Model $form): string => $form instanceof self ? view('atrium-forms::admin.snippets', ['snippets' => new Snippets($form)])->render() : ''),
         ];
     }
 

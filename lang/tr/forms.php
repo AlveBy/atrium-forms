@@ -48,6 +48,17 @@ return [
         'radio' => 'Seçenek düğmeleri',
         'checkbox' => 'Onay kutusu',
     ],
+    'snippets' => [
+        'label' => 'Sitede',
+        'blade' => 'Bir Blade şablonunda',
+        'markup' => 'Kendi işaretlemeniz',
+        'markup_note' => 'Bu sitenin bir şablonu için: gizli alanlar belirteci ve spam korumasını taşır. Metinler sitenin varsayılan dilindedir.',
+        'script_note' => 'Sayfayı yenilemeden göndermek için <form> etiketine data-atrium-form ekleyin ve betiği sayfaya bir kez koyun:',
+        'fetch' => 'Kendi betiğinizle gönderme',
+        'fetch_note' => 'Aynı işaretleme, fetch ile gönderilir:',
+        'json' => 'Sunucunun yanıtı',
+        'json_note' => 'Captcha açıkken her yanıt "captcha" getirir: kullanılanın yerine yenisi.',
+    ],
     'public' => [
         'submit' => 'Gönder',
         'sent' => 'Teşekkürler! Mesajınız gönderildi.',

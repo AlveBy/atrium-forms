@@ -56,6 +56,8 @@ Both bring a dependency-free script, `/forms/script.js?v=…` (8 KB, under 3 KB 
 
 A request that wants JSON gets, on success, `{"message": "…"}`, and on an error 422 `{"message": "…", "errors": {"fields.email": ["…"], …}}`; 429 when the limit is reached. With a captcha on, both answers carry `"captcha"`, the HTML of a new one.
 
+The form's page in the admin, at the bottom, has all this filled in with the form's code and fields: the Blade tags, markup of your own for a template, the script tag, a `fetch` example and the JSON answers. More in [docs/forms.md](https://github.com/AlveBy/atrium/blob/main/docs/forms.md).
+
 The markup is plain HTML with `atrium-form*` classes and a few styles that take the colours of `alveby/atrium-theme`. To change it, `php artisan vendor:publish --tag=atrium-forms-views`.
 
 ## Spam and limits

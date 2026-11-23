@@ -47,7 +47,7 @@ final class ModelsTest extends TestCase
     {
         $fields = $this->byName(Form::getAdministrationFields());
 
-        $this->assertSame(['active', 'name', 'code', 'recipients', 'button_label', 'success_message', 'builder'], array_keys($fields));
+        $this->assertSame(['active', 'name', 'code', 'recipients', 'button_label', 'success_message', 'builder', 'snippets'], array_keys($fields));
         $this->assertTrue($fields['active']->getDefault());
         $this->assertContains('alpha_dash:ascii', $fields['code']->getValidationRules());
         $this->assertSame(

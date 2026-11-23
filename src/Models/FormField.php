@@ -64,13 +64,14 @@ class FormField extends Model
     }
 
     /**
-     * The options in the current language, one per line in the admin.
+     * The options in the current language, or the one asked, one per line
+     * in the admin.
      *
      * @return array<int,string>
      */
-    public function optionList(): array
+    public function optionList(?string $locale = null): array
     {
-        $lines = preg_split('/\r\n|\r|\n/', (string) $this->getTranslation('options', app()->getLocale())) ?: [];
+        $lines = preg_split('/\r\n|\r|\n/', (string) $this->getTranslation('options', $locale ?? app()->getLocale())) ?: [];
 
         return array_values(array_unique(array_filter(array_map('trim', $lines), static fn (string $line): bool => $line !== '')));
     }

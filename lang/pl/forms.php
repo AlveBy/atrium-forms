@@ -48,6 +48,17 @@ return [
         'radio' => 'Przyciski opcji',
         'checkbox' => 'Pole wyboru',
     ],
+    'snippets' => [
+        'label' => 'Na stronie',
+        'blade' => 'W szablonie Blade',
+        'markup' => 'Własny kod HTML',
+        'markup_note' => 'Do szablonu tej strony: ukryte pola niosą token i ochronę przed spamem. Teksty są w głównym języku strony.',
+        'script_note' => 'Aby formularz wysyłał się bez przeładowania strony, dodaj data-atrium-form do <form> i dołącz skrypt raz na stronie:',
+        'fetch' => 'Wysyłanie własnym skryptem',
+        'fetch_note' => 'Ten sam kod, wysyłany przez fetch:',
+        'json' => 'Co odpowiada serwer',
+        'json_note' => 'Przy włączonej captchy każda odpowiedź zawiera "captcha" — nową w miejsce zużytej.',
+    ],
     'public' => [
         'submit' => 'Wyślij',
         'sent' => 'Dziękujemy! Wiadomość została wysłana.',

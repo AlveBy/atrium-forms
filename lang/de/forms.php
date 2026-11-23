@@ -48,6 +48,17 @@ return [
         'radio' => 'Optionsfelder',
         'checkbox' => 'Kontrollkästchen',
     ],
+    'snippets' => [
+        'label' => 'Auf der Website',
+        'blade' => 'In einem Blade-Template',
+        'markup' => 'Eigenes Markup',
+        'markup_note' => 'Für ein Template dieser Website: Die versteckten Felder tragen das Token und den Spamschutz. Die Texte sind in der Standardsprache der Website.',
+        'script_note' => 'Damit das Formular ohne Neuladen der Seite gesendet wird, ergänzen Sie data-atrium-form im <form> und binden das Skript einmal auf der Seite ein:',
+        'fetch' => 'Mit eigenem Skript senden',
+        'fetch_note' => 'Dasselbe Markup, mit fetch gesendet:',
+        'json' => 'Was der Server antwortet',
+        'json_note' => 'Mit eingeschaltetem Captcha enthält jede Antwort "captcha", ein neues anstelle des verbrauchten.',
+    ],
     'public' => [
         'submit' => 'Senden',
         'sent' => 'Vielen Dank! Ihre Nachricht wurde gesendet.',
