@@ -15,6 +15,9 @@ return [
     |
     | POST /{prefix}/{code}, and /{language}/{prefix}/{code} for the other
     | content languages. The Blade component builds the address by itself.
+    | GET on the same address is the form's own page (what the button of a
+    | form in a window leads to without JavaScript), /{prefix}/script.js the
+    | script that sends the forms without reloading the page.
     |
     */
     'prefix' => 'forms',

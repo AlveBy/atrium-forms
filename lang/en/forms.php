@@ -52,6 +52,8 @@ return [
         'sent' => 'Thank you! Your message has been sent.',
         'too_fast' => 'The form was sent too quickly. Please check it and send it again.',
         'too_many' => 'Too many attempts. Please try again in a minute.',
+        'failed' => 'The form could not be sent. Please check your connection and try again.',
+        'close' => 'Close',
         'honeypot' => 'Leave this field empty',
         'choose' => '— Choose —',
         'yes' => 'Yes',

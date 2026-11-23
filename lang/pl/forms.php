@@ -53,6 +53,8 @@ return [
         'sent' => 'Dziękujemy! Wiadomość została wysłana.',
         'too_fast' => 'Formularz został wysłany zbyt szybko. Sprawdź go i wyślij ponownie.',
         'too_many' => 'Zbyt wiele prób. Spróbuj ponownie za minutę.',
+        'failed' => 'Nie udało się wysłać formularza. Sprawdź połączenie i spróbuj ponownie.',
+        'close' => 'Zamknij',
         'honeypot' => 'Zostaw to pole puste',
         'choose' => '— Wybierz —',
         'yes' => 'Tak',

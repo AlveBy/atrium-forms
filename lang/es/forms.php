@@ -53,6 +53,8 @@ return [
         'sent' => '¡Gracias! Su mensaje ha sido enviado.',
         'too_fast' => 'El formulario se envió demasiado rápido. Revíselo y envíelo de nuevo.',
         'too_many' => 'Demasiados intentos. Inténtelo de nuevo en un minuto.',
+        'failed' => 'No se pudo enviar el formulario. Compruebe la conexión e inténtelo de nuevo.',
+        'close' => 'Cerrar',
         'honeypot' => 'Deje este campo vacío',
         'choose' => '— Elija —',
         'yes' => 'Sí',

@@ -53,6 +53,8 @@ return [
         'sent' => 'Grazie! Il tuo messaggio è stato inviato.',
         'too_fast' => 'Il modulo è stato inviato troppo in fretta. Controllalo e invialo di nuovo.',
         'too_many' => 'Troppi tentativi. Riprova tra un minuto.',
+        'failed' => 'Impossibile inviare il modulo. Controlla la connessione e riprova.',
+        'close' => 'Chiudi',
         'honeypot' => 'Lascia vuoto questo campo',
         'choose' => '— Scegli —',
         'yes' => 'Sì',

@@ -53,6 +53,8 @@ return [
         'sent' => 'Teşekkürler! Mesajınız gönderildi.',
         'too_fast' => 'Form çok hızlı gönderildi. Lütfen kontrol edip yeniden gönderin.',
         'too_many' => 'Çok fazla deneme. Lütfen bir dakika sonra tekrar deneyin.',
+        'failed' => 'Form gönderilemedi. Bağlantınızı kontrol edip tekrar deneyin.',
+        'close' => 'Kapat',
         'honeypot' => 'Bu alanı boş bırakın',
         'choose' => '— Seçin —',
         'yes' => 'Evet',

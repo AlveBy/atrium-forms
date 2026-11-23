@@ -53,6 +53,8 @@ return [
         'sent' => 'Obrigado! Sua mensagem foi enviada.',
         'too_fast' => 'O formulário foi enviado rápido demais. Verifique-o e envie novamente.',
         'too_many' => 'Tentativas demais. Tente novamente em um minuto.',
+        'failed' => 'Não foi possível enviar o formulário. Verifique a conexão e tente novamente.',
+        'close' => 'Fechar',
         'honeypot' => 'Deixe este campo vazio',
         'choose' => '— Escolha —',
         'yes' => 'Sim',

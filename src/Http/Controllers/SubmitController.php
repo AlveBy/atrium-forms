@@ -129,7 +129,7 @@ final class SubmitController
         $message = filled($form->success_message) ? $form->success_message : __('atrium-forms::forms.public.sent');
 
         if ($request->expectsJson()) {
-            return response()->json(['message' => $message]);
+            return response()->json(['message' => $message, ...self::captcha()]);
         }
 
         return back()->with('atrium-forms.sent', $form->code)->withFragment('form-'.$form->code);
@@ -138,7 +138,7 @@ final class SubmitController
     /**
      * Back to the form with its errors and what the visitor typed, less the
      * form's time and the captcha (a used captcha is not asked again); JSON
-     * gets 422.
+     * gets 422 with the errors and a new captcha.
      *
      * @param  array<string,mixed>  $errors
      */
@@ -147,12 +147,25 @@ final class SubmitController
         $code = $form instanceof Form ? $form->code : $form;
         $exception = ValidationException::withMessages($errors)->errorBag(self::errorBag($code));
 
-        if (! $request->expectsJson()) {
-            $exception->response = redirect()->to(url()->previous().'#form-'.$code)
+        $exception->response = $request->expectsJson()
+            ? response()->json(['message' => $exception->getMessage(), 'errors' => $exception->errors(), ...self::captcha()], 422)
+            : redirect()->to(url()->previous().'#form-'.$code)
                 ->withErrors($exception->errors(), self::errorBag($code))
                 ->withInput($request->except([SpamGuard::TIME_FIELD, ...CaptchaManager::INPUTS]));
-        }
 
         return $exception;
+    }
+
+    /**
+     * Every answer uses the captcha up: a page that stays (the script) is
+     * sent a new one with the reply.
+     *
+     * @return array{captcha?:string}
+     */
+    private static function captcha(): array
+    {
+        $captcha = app(CaptchaManager::class);
+
+        return config('atrium-forms.captcha', true) && $captcha->enabled() ? ['captcha' => (string) $captcha->widget()] : [];
     }
 }

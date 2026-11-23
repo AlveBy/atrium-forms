@@ -53,6 +53,8 @@ return [
         'sent' => 'Rahmat! Xabaringiz yuborildi.',
         'too_fast' => 'Shakl juda tez yuborildi. Uni tekshirib, qayta yuboring.',
         'too_many' => 'Urinishlar juda ko‘p. Bir daqiqadan so‘ng qayta urinib ko‘ring.',
+        'failed' => 'Shaklni yuborib bo‘lmadi. Ulanishni tekshirib, qayta urinib ko‘ring.',
+        'close' => 'Yopish',
         'honeypot' => 'Bu maydonni bo‘sh qoldiring',
         'choose' => '— Tanlang —',
         'yes' => 'Ha',

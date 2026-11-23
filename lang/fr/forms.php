@@ -53,6 +53,8 @@ return [
         'sent' => 'Merci ! Votre message a été envoyé.',
         'too_fast' => 'Le formulaire a été envoyé trop vite. Vérifiez-le et envoyez-le à nouveau.',
         'too_many' => 'Trop de tentatives. Réessayez dans une minute.',
+        'failed' => 'Le formulaire n’a pas pu être envoyé. Vérifiez la connexion et réessayez.',
+        'close' => 'Fermer',
         'honeypot' => 'Laissez ce champ vide',
         'choose' => '— Choisir —',
         'yes' => 'Oui',

@@ -53,6 +53,8 @@ return [
         'sent' => 'Vielen Dank! Ihre Nachricht wurde gesendet.',
         'too_fast' => 'Das Formular wurde zu schnell gesendet. Bitte prüfen Sie es und senden Sie es erneut.',
         'too_many' => 'Zu viele Versuche. Bitte versuchen Sie es in einer Minute erneut.',
+        'failed' => 'Das Formular konnte nicht gesendet werden. Bitte prüfen Sie die Verbindung und versuchen Sie es erneut.',
+        'close' => 'Schließen',
         'honeypot' => 'Dieses Feld leer lassen',
         'choose' => '— Auswählen —',
         'yes' => 'Ja',

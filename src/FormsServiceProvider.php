@@ -10,6 +10,8 @@ declare(strict_types=1);
 namespace Atrium\Forms;
 
 use Atrium\Admin\Modules\Modules;
+use Atrium\Forms\Http\Controllers\ScriptController;
+use Atrium\Forms\Http\Controllers\ShowController;
 use Atrium\Forms\Http\Controllers\SubmitController;
 use Atrium\Forms\Models\Form;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -21,6 +23,9 @@ use Illuminate\Support\ServiceProvider;
 
 final class FormsServiceProvider extends ServiceProvider
 {
+    /** What a form's code may be in an address. */
+    private const CODE = '[A-Za-z0-9_-]+';
+
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/atrium-forms.php', 'atrium-forms');
@@ -41,6 +46,8 @@ final class FormsServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'atrium-forms');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'atrium-forms');
         Blade::componentNamespace('Atrium\\Forms\\View\\Components', 'atrium-forms');
+        // @atriumForm('contact', ['modal' => true]): the component in one line.
+        Blade::directive('atriumForm', static fn (string $expression): string => "<?php echo \\Atrium\\Forms\\View\\Components\\Form::inline({$expression}); ?>");
 
         RateLimiter::for('atrium-forms', function (Request $request): Limit {
             $code = $request->route('code');
@@ -64,10 +71,20 @@ final class FormsServiceProvider extends ServiceProvider
                 return;
             }
 
-            Route::middleware(['web', 'throttle:atrium-forms'])->group(function (): void {
-                Route::localized(function (): void {
-                    Route::post(trim((string) config('atrium-forms.prefix', 'forms'), '/').'/{code}', SubmitController::class)
-                        ->where('code', '[A-Za-z0-9_-]+')
+            $prefix = trim((string) config('atrium-forms.prefix', 'forms'), '/');
+
+            // One file for every language and site, without a session.
+            Route::get("{$prefix}/script.js", ScriptController::class)->name('atrium.forms.script');
+
+            Route::middleware('web')->group(function () use ($prefix): void {
+                Route::localized(function () use ($prefix): void {
+                    Route::get("{$prefix}/{code}", ShowController::class)
+                        ->where('code', self::CODE)
+                        ->name('atrium.forms.show');
+
+                    Route::post("{$prefix}/{code}", SubmitController::class)
+                        ->where('code', self::CODE)
+                        ->middleware('throttle:atrium-forms')
                         ->name('atrium.forms.submit');
                 });
             });
