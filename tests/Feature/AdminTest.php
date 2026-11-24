@@ -9,7 +9,9 @@ declare(strict_types=1);
 
 namespace Atrium\Forms\Tests\Feature;
 
+use Atrium\Admin\History\Trash;
 use Atrium\Admin\Models\Site;
+use Atrium\Admin\Models\TrashedRecord;
 use Atrium\Forms\Models\Form;
 use Atrium\Forms\Models\FormField;
 use Atrium\Forms\Models\FormSubmission;
@@ -70,6 +72,9 @@ final class AdminTest extends TestCase
                 ->where('item.builder.1.width', 6));
 
         $this->delete("/admin/forms/{$form->id}")->assertRedirect();
+        $this->assertSame(2, FormField::query()->count(), 'A form in the trash keeps its fields.');
+
+        app(Trash::class)->purge(TrashedRecord::query()->sole());
         $this->assertSame(0, FormField::query()->count());
     }
 
@@ -133,6 +138,8 @@ final class AdminTest extends TestCase
         $this->post('/forms/contact', $this->submission())->assertRedirect();
 
         $this->actingAs($this->admin(), 'admin')->delete("/admin/forms/{$form->id}");
+        $this->assertSame($form->id, FormSubmission::query()->sole()->form_id, 'The form is in the trash.');
+        app(Trash::class)->purge(TrashedRecord::query()->sole());
 
         $submission = FormSubmission::query()->sole();
         $this->assertNull($submission->form_id);
