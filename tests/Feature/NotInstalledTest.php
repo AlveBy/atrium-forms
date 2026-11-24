@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Atrium\Forms\Tests\Feature;
 
+use Atrium\Admin\Embeds\Embeds;
 use Atrium\Forms\Tests\TestCase;
 
 /**
@@ -30,5 +31,16 @@ final class NotInstalledTest extends TestCase
 
         $this->get('/contacts')->assertOk()->assertDontSee('<form', false);
         $this->post('/forms/contact', $this->submission())->assertNotFound();
+    }
+
+    public function test_the_form_is_not_offered_to_editors_and_its_placeholders_show_nothing(): void
+    {
+        $embeds = $this->app->make(Embeds::class);
+        $admin = $this->admin();
+
+        $this->assertNull($embeds->get('form'));
+        $this->assertSame([], $embeds->types($admin));
+        $this->assertSame('<p>a</p>', $embeds->render('<p>a</p><div data-atrium-embed="form" data-id="1"></div>'));
+        $this->actingAs($admin, 'admin')->getJson('/admin/embeds/form')->assertNotFound();
     }
 }

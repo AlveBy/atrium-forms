@@ -9,7 +9,10 @@ declare(strict_types=1);
 
 namespace Atrium\Forms;
 
+use Atrium\Admin\Embeds\Embeds;
+use Atrium\Admin\Hooks\Hooks;
 use Atrium\Admin\Modules\Modules;
+use Atrium\Forms\Embeds\FormEmbed;
 use Atrium\Forms\Http\Controllers\ScriptController;
 use Atrium\Forms\Http\Controllers\ShowController;
 use Atrium\Forms\Http\Controllers\SubmitController;
@@ -47,6 +50,8 @@ final class FormsServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'atrium-forms');
         Blade::componentNamespace('Atrium\\Forms\\View\\Components', 'atrium-forms');
         // @atriumForm('contact', ['modal' => true]): the component in one line.
+        // "Insert → Form" in the editors; the type is off while the module is not installed.
+        $this->app->make(Hooks::class)->register(Embeds::REGISTRY, 'form', new FormEmbed);
         Blade::directive('atriumForm', static fn (string $expression): string => "<?php echo \\Atrium\\Forms\\View\\Components\\Form::inline({$expression}); ?>");
 
         RateLimiter::for('atrium-forms', function (Request $request): Limit {
