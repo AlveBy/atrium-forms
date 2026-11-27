@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Atrium\Forms\Tests\Feature;
 
+use Atrium\Admin\Builder\BlockTypes;
 use Atrium\Admin\Embeds\Embeds;
 use Atrium\Forms\Tests\TestCase;
 
@@ -42,5 +43,13 @@ final class NotInstalledTest extends TestCase
         $this->assertSame([], $embeds->types($admin));
         $this->assertSame('<p>a</p>', $embeds->render('<p>a</p><div data-atrium-embed="form" data-id="1"></div>'));
         $this->actingAs($admin, 'admin')->getJson('/admin/embeds/form')->assertNotFound();
+    }
+
+    public function test_the_site_builder_does_not_offer_its_block(): void
+    {
+        $types = $this->app->make(BlockTypes::class);
+
+        $this->assertNull($types->get('form'));
+        $this->assertArrayNotHasKey('form', $types->all());
     }
 }

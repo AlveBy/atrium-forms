@@ -79,4 +79,7 @@ return [
         'heading' => '新提交：:form',
         'page' => '提交页面',
     ],
+    'builder' => [
+        'modal' => '点击按钮后在窗口中打开',
+    ],
 ];

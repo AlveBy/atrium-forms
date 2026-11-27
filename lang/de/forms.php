@@ -79,4 +79,7 @@ return [
         'heading' => 'Neue Einsendung: :form',
         'page' => 'Gesendet von',
     ],
+    'builder' => [
+        'modal' => 'Über eine Schaltfläche in einem Fenster öffnen',
+    ],
 ];

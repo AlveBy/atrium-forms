@@ -79,4 +79,7 @@ return [
         'heading' => 'Nowe zgłoszenie: :form',
         'page' => 'Wysłano ze strony',
     ],
+    'builder' => [
+        'modal' => 'Otwieraj w oknie po kliknięciu przycisku',
+    ],
 ];

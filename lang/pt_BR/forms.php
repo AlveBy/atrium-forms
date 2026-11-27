@@ -79,4 +79,7 @@ return [
         'heading' => 'Novo envio: :form',
         'page' => 'Enviado de',
     ],
+    'builder' => [
+        'modal' => 'Abrir em uma janela por um botão',
+    ],
 ];

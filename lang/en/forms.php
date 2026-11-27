@@ -78,4 +78,7 @@ return [
         'heading' => 'New submission: :form',
         'page' => 'Sent from',
     ],
+    'builder' => [
+        'modal' => 'Open in a window behind a button',
+    ],
 ];

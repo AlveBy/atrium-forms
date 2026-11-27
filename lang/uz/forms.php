@@ -79,4 +79,7 @@ return [
         'heading' => 'Yangi ariza: :form',
         'page' => 'Yuborilgan sahifa',
     ],
+    'builder' => [
+        'modal' => 'Tugma orqali oynada ochish',
+    ],
 ];

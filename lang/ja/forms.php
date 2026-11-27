@@ -79,4 +79,7 @@ return [
         'heading' => '新しい送信: :form',
         'page' => '送信元',
     ],
+    'builder' => [
+        'modal' => 'ボタンを押すとウィンドウで開く',
+    ],
 ];

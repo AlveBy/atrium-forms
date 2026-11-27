@@ -79,4 +79,7 @@ return [
         'heading' => 'Nouvel envoi : :form',
         'page' => 'Envoyé depuis',
     ],
+    'builder' => [
+        'modal' => 'Ouvrir dans une fenêtre depuis un bouton',
+    ],
 ];

@@ -79,4 +79,7 @@ return [
         'heading' => 'Yeni gönderim: :form',
         'page' => 'Gönderildiği sayfa',
     ],
+    'builder' => [
+        'modal' => 'Bir düğmeyle pencerede aç',
+    ],
 ];
